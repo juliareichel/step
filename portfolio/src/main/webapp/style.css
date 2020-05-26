@@ -6,7 +6,25 @@
 
 #portrait {
     max-width: 100%;
+    border-bottom: 20px;
 }
-#greeting-container {
-  margin-top: 20px;
+
+#fact_btn {
+    padding: 10px; 
+    border-radius: 5%;
+}
+
+#header {
+    text-align: center
+}
+
+.fact_styling {
+    margin-top: 20px;
+    margin-bottom: 20px;
+    font-size: 16px;
+    border: 2px solid black;
+}
+
+.place {
+    text-align: center;
 }
