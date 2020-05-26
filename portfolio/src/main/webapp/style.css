@@ -4,6 +4,9 @@
   width: 650px;
 }
 
+#portrait {
+    max-width: 100%;
+}
 #greeting-container {
   margin-top: 20px;
 }
