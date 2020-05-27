@@ -15,15 +15,20 @@
 /**
  * Adds a random fact to the page.
  */
-function addRandomFact() {
-  const facts =
-      ['My favorite color is purple', 'I was captain of my high school\'s varsity basketball & softball teams', 'My favorite food is chocolate', 'My favorite ice cream flavor is mint chocolate chip'];
+ const FACTS =
+      ['My middle name is rose', 
+      'My favorite color is purple', 
+      'I was captain of my high school\'s varsity basketball & softball teams', 
+      'My favorite food is chocolate', 
+      'My favorite ice cream flavor is mint chocolate chip'
+      ];
 
+function addRandomFact() {
   // Pick a random greeting.
-  const fact = facts[Math.floor(Math.random() * facts.length)];
+  const FACT = FACTS[Math.floor(Math.random() * FACTS.length)];
 
   // Add it to the page.
-  const factContainer = document.getElementById('fact-container');
-  factContainer.classList.add('fact_styling')
-  factContainer.innerText = fact;
+  const FACT_CONTAINER = document.getElementById('fact_container');
+  FACT_CONTAINER.classList.add('fact_styling')
+  FACT_CONTAINER.innerText = FACT;
 }
