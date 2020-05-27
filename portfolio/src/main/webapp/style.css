@@ -1,3 +1,17 @@
+.nav {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    text-decoration: none;
+    /*background-color:#990000;*/
+    width: 100%;
+}
+
+.nav_item {
+    color: white;
+    display: inline;
+}
+
 #content {
     font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
 }
@@ -27,8 +41,22 @@ h1 {
     border-bottom: 20px;
 }
 
+.bold {
+    font-weight: bold;
+
+}
+
 a {
     text-decoration: none;
+}
+
+.role {
+    margin-bottom: 20px;
+}
+
+.club {
+    height: 200px;
+    margin-left: 70px;
 }
 
 #fact_btn {
