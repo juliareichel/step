@@ -1,0 +1,17 @@
+.bold {
+    font-weight: bold;
+
+}
+
+.link {
+    text-decoration: none;
+}
+
+.role {
+    margin-bottom: 20px;
+}
+
+.club {
+    height: 200px;
+    margin-left: 70px;
+}
