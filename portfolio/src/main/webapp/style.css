@@ -1,12 +1,34 @@
 #content {
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+}
+
+#page_title {
+    background-image: url("/images/roses.jpg");
+    min-height: 200px;
+    display: flex;
+    align-items: center;
+}
+
+h1 {
+    color: white;
+    font-size: 40px;
+    margin-left: 10%;
+}
+
+#content {
   margin-left: auto;
   margin-right: auto;
   width: 650px;
 }
 
-#portrait {
-    max-width: 100%;
+.portrait {
+    width: 32%;
+    height: 273px;
     border-bottom: 20px;
+}
+
+a {
+    text-decoration: none;
 }
 
 #fact_btn {
