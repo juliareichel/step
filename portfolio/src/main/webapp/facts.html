@@ -2,7 +2,7 @@
 <html>
   <head>
     <meta charset="UTF-8">
-    <title>My Portfolio</title>
+    <title>Random Facts</title>
     <link rel="stylesheet" href="style.css">
     <script src="script.js"></script>
   </head>
@@ -20,21 +20,9 @@
         </nav>
             <h1>Julia Reichel's Portfolio</h1>
         </div>
-      
-        <h2 id="intro"> Intro </h2> 
-        <p>Hi! My name is Julia and I am a rising junior at Barnard College of Columbia University. 
-            I am majoring in computer science and minoring in economics. I am interested in the 
-            intersection between technology and business.
-        </p><br>
 
-        <div id="photo_gallery">
-            <img class="portrait" src="/images/myself.jpg">
-            <img class="portrait" src="/images/myself2.JPG">
-            <img class="portrait" src="/images/myself3.JPG">
-            <img class="portrait" src="/images/myself4.jpg">
-            <img class="portrait" src="/images/myself10.jpg">
-            <img class="portrait" src="/images/myself7.jpg">
-        </div>
+        <button id="fact_btn" onclick="addRandomFact()">Click to see a fun fact!</button>
+        <div id="fact-container"></div>
     </div>
   </body>
 </html>
