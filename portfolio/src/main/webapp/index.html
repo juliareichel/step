@@ -4,102 +4,50 @@
     <meta charset="UTF-8">
     <title>My Portfolio</title>
     <link rel="stylesheet" href="style.css">
-    <script src="script.js"></script>
+    <link rel="stylesheet" href="home.css">
+    <script src="home.js"></script>
   </head>
   <body>
     <div id="content">
+        <nav>
+            <ul class="nav_container">
+                <li><a class="nav_item" href="index.html">Home</a></li>
+                <li><a class="nav_item" href="leadership.html">Leadership</a></li>
+                <li><a class="nav_item" href="activities.html">Activites</a></li>
+                <li><a class="nav_item" href="destinations.html">Destinations</a></li>
+                <li><a class="nav_item" href="facts.html">Facts</a></li>
+            </ul>
+        </nav><br>
         <div id="page_title">
-            <h1>Julia Reichel's Portfolio</h1>
+            <div class="header">Julia Reichel's Portfolio</div>
         </div>
-      <h2 id="intro"> Intro </h2> 
-      <p>Hi! My name is Julia and I am a rising junior at Barnard College of Columbia University. 
-        I am majoring in computer science and minoring in economics. I am interested in the 
-        intersection between technology and business.</p> <br>
-    <div id="photo_gallery">
-      <img class="portrait" src="/images/myself.jpg">
-      <img class="portrait" src="/images/myself2.JPG">
-      <img class="portrait" src="/images/myself3.JPG">
-      <img class="portrait" src="/images/myself4.jpg">
-      <img class="portrait" src="/images/myself10.jpg">
-      <img class="portrait" src="/images/myself7.jpg">
-    </div>
-
-      <p>On campus, I hold leadership positions in several clubs:</p> 
-        <ul> 
-            <li> I am currently the President of the Columbia chapter of the <a href="https://tamidgroup.org/"> TAMID Group </a> a pre-professional club, with 57 chapters across 
-                different college campuses, that offers experiential business and consulting opportunities for undergraduates. Students partner with real companies and start-ups 
-                to gain hands-on-experience. This upcoming fall, we are planning to pilot a third track, a technology track. </li>
-            <li> I am currently the Executive Vice President and in the process of co-founding a chapter of <a href="https://thewomensnetwork01.wixsite.com/syracuse"> The Women's Network, </a> 
-                a national women-led networking organization focused on connecting ambitious undergraduate students with professional workers.</li> 
-         </ul> 
-         <div id="club_logos">
-             <img class="club" src="/images/tamid.jpg">
-             <img class="club" src="/images/twn.jpg">
-         </div>
-
-      <p>During my free time in quarantine I: <p>
-
-           Watched shows on Netflix and HBO:
-          <ul class="shows">
-              <li> Outer Banks </li>
-              <li> Big Little Lies </li>
-              <li> All American </li>
-              <li> Money Heist </li>
-              <li> Selling Sunset </li>
-          </ul>
-          Grown into a voracious reader:
-          <ul class="books">
-              <li> Swipe to Unlock- Neel Mehta, Aditya Agashe, Parth Detroja </li>
-              <li> The Silent Sister- Diane Chamberlain </li>
-              <li> A Fire Sparkling- Julianne MacLean </li>
-              <li> A Tender Land- William Kent Krueger </li>
-              <li> In Five Years- Rebecca Serle </li>
-          </ul>
-          Tried several online workout routines:
-          <ul>
-              <li> Chloe Ting Summer Shred </li>
-              <li> Alexis Ren workouts </li>
-              <li> 305 Dance recordings</li>
-              <li> Peloton live streams</li>
-          </ul>
       
-      <button id="fact_btn" onclick="addRandomFact()">Click to see a fun fact!</button>
-      <div id="fact-container"></div>
-      <p id="header"> Dream Vacation Spots </p>
-      <div class="vacation_spots">
-          <div class = "destination">
-            <img src="/images/capri.jpeg"> <br>
-            <span class="place">Capri</span>
-          </div>
-          <div class = "destination">
-            <img src="/images/costarica.jpeg"> <br>
-            <span class="name">Costa Rica</span>
-          </div>
-          <div class = "destination">
-            <img src="/images/mykonos.jpeg"> <br>
-            <span class="name">Mykonos</span>
-          </div>
-           <div class = "destination">
-            <img src="/images/panama.jpeg"> <br>
-            <span class="name">Panama</span>
-          </div>
-          <div class = "destination">
-            <img src="/images/rhodes.jpeg"> <br>
-            <span class="name">Rhodes</span>
-          </div>
-          <div class = "destination">
-            <img src="/images/santorini.jpeg"> <br>
-            <span class="name">Santorini</span>
-          </div>
-          <div class = "destination">
-            <img src="/images/venice.jpeg"> <br>
-            <span class="name">Venice</span>
-          </div>
-          <div class = "destination">
-            <img src="/images/bondi.jpeg"> <br>
-            <span class="place">Bondi</span>
-          </div>
-      </div>
+        <h2 id="intro">Intro</h2> 
+        <p>Hi! My name is Julia and I am a rising junior at Barnard College of Columbia University. 
+            I am majoring in computer science and minoring in economics. I am interested in the 
+            intersection between technology and business.
+        </p><br>
+
+        <div id="photo_gallery">
+            <img class="portrait" src="/images/myself.jpg">
+            <img class="portrait" src="/images/myself2.JPG">
+            <img class="portrait" src="/images/myself3.JPG">
+            <img class="portrait" src="/images/myself4.jpg">
+            <img class="portrait" src="/images/myself10.jpg">
+            <img class="portrait" src="/images/myself7.jpg">
+        </div>
+
+        <div id="contact_container">
+            <h2 id="contact_header">Contact Me</h2>
+            <div class="form_of_contact">
+                <img class="logo_size" id="linked_in" src="/images/linkedin.jpg" onclick="open_linkedin()">
+                <div id="site_name">Linked In</div>
+            </div>
+            <div class="form_of_contact" id="gmail">
+                <img class="logo_size" src="/images/gmail.jpg">
+                <div id="email_address"> Juliareichel@google.com</div>
+            </div>
+        </div>
     </div>
   </body>
 </html>

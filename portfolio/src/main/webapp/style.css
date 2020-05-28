@@ -1,3 +1,36 @@
+nav {
+    width: 100%;
+    margin-top: 15px;
+    height: 45px;
+    background-image: url("/images/roses.jpg");
+}
+
+.nav_container {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    text-decoration: none;
+    width: 100%;  
+}
+
+.nav_container li {
+    float: left;
+    margin-left: 38px;
+    margin-top: 10px;
+}
+
+.header {
+    color: white;
+    font-size: 40px;
+    margin-left: 12%;
+}
+
+.nav_item {
+    color: white;
+    display: inline;
+    font-weight: 600;
+}
+
 #content {
     font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
 }
@@ -9,44 +42,9 @@
     align-items: center;
 }
 
-h1 {
-    color: white;
-    font-size: 40px;
-    margin-left: 10%;
-}
-
 #content {
   margin-left: auto;
   margin-right: auto;
   width: 650px;
 }
 
-.portrait {
-    width: 32%;
-    height: 273px;
-    border-bottom: 20px;
-}
-
-a {
-    text-decoration: none;
-}
-
-#fact_btn {
-    padding: 10px; 
-    border-radius: 5%;
-}
-
-#header {
-    text-align: center
-}
-
-.fact_styling {
-    margin-top: 20px;
-    margin-bottom: 20px;
-    font-size: 16px;
-    border: 2px solid black;
-}
-
-.place {
-    text-align: center;
-}

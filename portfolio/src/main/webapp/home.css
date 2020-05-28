@@ -1,0 +1,23 @@
+.portrait {
+    width: 32%;
+    height: 273px;
+    border-bottom: 20px;
+}
+
+.logo_size {
+    max-height: 70px;
+}
+
+.form_of_contact {
+    display: inline-block;
+    text-align: center;
+    margin-bottom: 15px;
+}
+
+#linked_in {
+    cursor: pointer;
+}
+
+#gmail {
+    margin-left: 35px;
+}
