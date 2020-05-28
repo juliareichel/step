@@ -1,0 +1,10 @@
+#vacation_header {
+    text-align: center
+}
+
+.destination {
+    display: inline-block;
+    margin-left: 25px;
+    margin-bottom: 15px;
+    text-align: center;
+}
