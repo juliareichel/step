@@ -1,10 +1,28 @@
+nav {
+    width: 100%;
+    margin-left: 30px;
+    margin-top: 15px;
+    height: 45px;
+}
+
 .nav {
     list-style-type: none;
     margin: 0;
     padding: 0;
     text-decoration: none;
     /*background-color:#990000;*/
-    width: 100%;
+    width: 100%;  
+}
+
+.nav li {
+    float: left;
+    margin-right: 35px;
+}
+
+.header {
+    color: white;
+    font-size: 40px;
+    margin-left: 10%;
 }
 
 .nav_item {
@@ -20,13 +38,7 @@
     background-image: url("/images/roses.jpg");
     min-height: 200px;
     display: flex;
-    align-items: center;
-}
-
-h1 {
-    color: white;
-    font-size: 40px;
-    margin-left: 10%;
+    /*align-items: center;*/
 }
 
 #content {
@@ -60,12 +72,21 @@ a {
 }
 
 #fact_btn {
-    padding: 10px; 
-    border-radius: 5%;
+    padding: 23px; 
+    border-radius: 10%;
+    margin-left: 32%;
+    margin-top: 40px;
+    font-weight: bold;
+    background: #F08080;
+    color: white;
+    font-size: 16px;
 }
 
-#header {
-    text-align: center
+#fact_container {
+    padding: 25px;
+    border-color: #F08080;
+    text-align: center;
+    font-weight: bold;
 }
 
 .fact_styling {
@@ -75,6 +96,26 @@ a {
     border: 2px solid black;
 }
 
-.place {
+#vacation_header {
+    text-align: center
+}
+
+.destination {
+    display: inline-block;
+    margin-left: 25px;
+    margin-bottom: 15px;
     text-align: center;
+}
+
+.tip {
+    font-weight: 700;
+    font-size: 12px;
+}
+
+.light {
+    max-width: 30px;
+}
+
+.spacing {
+    margin-bottom: 35px;
 }
