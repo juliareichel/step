@@ -1,16 +1,15 @@
-function getGreeting() {
+function getList() {
     console.log("in the function")
-    fetch('/data').then(response => response.text()).then((greeting)=> {
-        console.log("fetching the greeting")
-        document.getElementById('greeting_container').innerText = greeting;
-        console.log("should of printed!")
+    fetch('/data').then(response => response.json()).then((list) => {
+        document.getElementById('list_container').innerText = list.join('\n');
     });
 }
 
-async function getGreetingAsyncAwait() {
+async function getListAsyncAwait() {
   const response = await fetch('/data');
-  const quote = await response.text();
-  document.getElementById('greeting_container').innerText = quote;
+  const list = await response.json();
+  console.log("fetching the list: ", list);
+  document.getElementById('list_container').innerText = list;
 }
 
 function open_linkedin() {
