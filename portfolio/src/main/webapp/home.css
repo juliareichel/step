@@ -21,3 +21,22 @@
 #gmail {
     margin-left: 35px;
 }
+
+#contact_you {
+    margin-bottom: 2px;
+}
+
+#form_instructions {
+    font-size: 12px;
+    margin-bottom: 35px;
+}
+
+#submit_button {
+    margin-top: 10px;
+    padding-right: 8px;
+    padding-left: 8px;
+}
+
+#email_list {
+    margin-bottom: 50px;
+}
