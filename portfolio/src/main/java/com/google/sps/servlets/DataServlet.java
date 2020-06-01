@@ -16,6 +16,7 @@ package com.google.sps.servlets;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import static java.lang.System.out;
 import com.google.gson.Gson;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -25,28 +26,49 @@ import javax.servlet.http.HttpServletResponse;
 /** Servlet that returns some example content. TODO: modify this file to handle comments data */
 @WebServlet("/data")
 public class DataServlet extends HttpServlet {
-  private ArrayList<String> family;
+   private ArrayList<String> emails;
 
-  @Override
-  public void init() {
-    family = new ArrayList<>();
-    family.add("Ben");
-    family.add("Andrea");
-    family.add("Matt");
-    family.add("Jake");
-    family.add("Julia");
-  } 
+//   @Override
+//   public void init() {
+//     family = new ArrayList<>();
+//     family.add("Ben");
+//     family.add("Andrea");
+//     family.add("Matt");
+//     family.add("Jake");
+//     family.add("Julia");
+//   } 
 
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-    String json = convertToJson(family);
     response.setContentType("application/json;");
+    String json = new Gson().toJson(emails);
     response.getWriter().println(json);
   }
 
-  private String convertToJson(ArrayList<String> a) {
-    Gson gson = new Gson();
-    String json = gson.toJson(a);
-    return json;
+//   private String convertToJson(String s) {
+//     System.out.println(s);
+//     Gson gson = new Gson();
+//     String json = gson.toJson(s);
+//     return json;
+//   }
+
+  @Override
+  public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
+
+      emails = new ArrayList<>();
+      String email = getEmail(request);
+      emails.add(email);
+
+      response.setContentType("text/html");
+    //   response.getWriter().println(email);
+      response.sendRedirect("/index.html");
+  }
+
+  private String getEmail(HttpServletRequest request) {
+    String value = request.getParameter("text-input");
+    if (value == null) {
+      return "";
+    }
+    return value;
   }
 }
