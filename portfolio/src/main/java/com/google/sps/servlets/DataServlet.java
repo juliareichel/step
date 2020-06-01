@@ -28,29 +28,12 @@ import javax.servlet.http.HttpServletResponse;
 public class DataServlet extends HttpServlet {
    private ArrayList<String> emails;
 
-//   @Override
-//   public void init() {
-//     family = new ArrayList<>();
-//     family.add("Ben");
-//     family.add("Andrea");
-//     family.add("Matt");
-//     family.add("Jake");
-//     family.add("Julia");
-//   } 
-
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
     response.setContentType("application/json;");
     String json = new Gson().toJson(emails);
     response.getWriter().println(json);
   }
-
-//   private String convertToJson(String s) {
-//     System.out.println(s);
-//     Gson gson = new Gson();
-//     String json = gson.toJson(s);
-//     return json;
-//   }
 
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
@@ -60,7 +43,6 @@ public class DataServlet extends HttpServlet {
       emails.add(email);
 
       response.setContentType("text/html");
-    //   response.getWriter().println(email);
       response.sendRedirect("/index.html");
   }
 
