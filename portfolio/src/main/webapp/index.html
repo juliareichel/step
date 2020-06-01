@@ -7,8 +7,15 @@
     <link rel="stylesheet" href="home.css">
     <script src="home.js"></script>
   </head>
-  <body>
+  <body onload=getGreetingAsyncAwait()>
     <div id="content">
+
+        <!-- trying to implement servlet using fetch()-->
+        <div class="servlet_tutorial">
+            <!-- <button onlick="getGreetingAsyncAwait()">Fetch the greeting!</button> -->
+            <div id="greeting_container"></div>
+        </div>
+
         <nav>
             <ul class="nav_container">
                 <li><a class="nav_item" href="index.html">Home</a></li>
