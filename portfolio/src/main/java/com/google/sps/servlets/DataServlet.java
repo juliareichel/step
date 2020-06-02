@@ -24,6 +24,7 @@ import com.google.appengine.api.datastore.FetchOptions;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import static java.lang.System.out;
 import com.google.gson.Gson;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -64,7 +65,11 @@ public class DataServlet extends HttpServlet {
     Query query = new Query("Email").addSort("timestamp", SortDirection.DESCENDING);
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
     PreparedQuery results = datastore.prepare(query);
-    List<Entity> email_entities = results.asList(FetchOptions.Builder.withLimit(3));
+
+    int userInput = getUserInput(request);
+    System.out.print("userInput: " + userInput);
+
+    List<Entity> email_entities = results.asList(FetchOptions.Builder.withLimit(userInput));
 
     List<String> emails = new ArrayList<>();
     for (Entity entity : email_entities) {
@@ -81,4 +86,28 @@ public class DataServlet extends HttpServlet {
     String json = new Gson().toJson(emails);
     response.getWriter().println(json);
   }
+
+  private int getUserInput(HttpServletRequest request) {
+    String userInputString = request.getParameter("quantity");
+    int userInput;
+
+    if (userInputString == null){
+      userInput = -1;
+    }
+
+    try {
+      userInput = Integer.parseInt(userInputString);
+    } 
+    catch (NumberFormatException e) {
+      System.err.println("Could not convert to int: " + userInputString);
+      return -1;
+    }
+
+    if (userInput < 1 || userInput > 10) {
+      System.err.println("User request out of range: " + userInputString);
+      return -1;
+    }
+    return userInput;
+  }
+
 }

@@ -39,9 +39,26 @@
     margin-top: 10px;
     padding-right: 8px;
     padding-left: 8px;
+    margin-bottom: 20px;
+}
+
+#quantity {
+    max-width: 30px;
+}
+
+#number_field {
+    font-size: 14px;
+    font-weight: bold;
+}
+
+#refresh_button {
+    margin-top: 10px;
+    padding-right: 8px;
+    padding-left: 8px;
 }
 
 h4 {
+    font-size: 14px;
     margin-bottom: 10px;
 }
 
