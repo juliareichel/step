@@ -22,6 +22,10 @@
     margin-left: 35px;
 }
 
+#email_address {
+    text-decoration: none;
+}
+
 #contact_you {
     margin-bottom: 2px;
 }
