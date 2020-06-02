@@ -7,14 +7,8 @@
     <link rel="stylesheet" href="home.css">
     <script src="home.js"></script>
   </head>
-  <body onload=getList()>
+  <body onload=getContact()>
     <div id="content">
-
-        <div class="servlet_tutorial">
-            <!-- <button onlick="getGreetingAsyncAwait()">Fetch the greeting!</button>  -->
-            <div id="list_container"></div>
-        </div>
-
         <nav>
             <ul class="nav_container">
                 <li><a class="nav_item" href="index.html">Home</a></li>
@@ -55,6 +49,19 @@
                     <a target= "_blank" id="email_address" href="mailto:juliareichel@google.com">Email Me</a>
                 </div>
             </div>
+
+            <h2 id="contact_you">Contact You</h2>
+            <p id="form_instructions">If you would like me to contact you, leave your email below</p>
+            
+            <form action="/data" method="POST">
+                <input name="text-input" placeholder="Insert Email"></input>
+                <br/>
+                <input id="submit_button" type="submit" />
+            </form>
+
+            <h4> List of contacts: </h4>
+            <div id="email_list"></div> 
+
         </div>
     </div>
   </body>

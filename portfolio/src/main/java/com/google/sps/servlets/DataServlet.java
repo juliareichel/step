@@ -15,7 +15,7 @@
 package com.google.sps.servlets;
 
 import java.io.IOException;
-import java.util.ArrayList;
+import java.util.*;
 import com.google.gson.Gson;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -25,28 +25,38 @@ import javax.servlet.http.HttpServletResponse;
 /** Servlet that returns some example content. TODO: modify this file to handle comments data */
 @WebServlet("/data")
 public class DataServlet extends HttpServlet {
-  private ArrayList<String> family;
+   private ArrayList<String> emails;
 
   @Override
   public void init() {
-    family = new ArrayList<>();
-    family.add("Ben");
-    family.add("Andrea");
-    family.add("Matt");
-    family.add("Jake");
-    family.add("Julia");
-  } 
+    emails = new ArrayList<>();
+  }
 
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-    String json = convertToJson(family);
     response.setContentType("application/json;");
+    String json = new Gson().toJson(emails);
     response.getWriter().println(json);
   }
 
-  private String convertToJson(ArrayList<String> a) {
-    Gson gson = new Gson();
-    String json = gson.toJson(a);
-    return json;
+  @Override
+  public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
+      String email = getEmail(request);
+
+      if (email != "") {
+        emails.add(email);
+      }
+
+      response.setContentType("text/html");
+      response.sendRedirect("/index.html");
+  }
+
+  private String getEmail(HttpServletRequest request) {
+    String value = request.getParameter("text-input");
+    if (value.contains(".com") || value.contains(".net") ||
+      value.contains(".org") || value.contains(".edu")) {
+        return value;
+    }
+    return "";
   }
 }
