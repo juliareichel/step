@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="home.css">
     <script src="home.js"></script>
   </head>
-  <body>
+  <body onload=getContact()>
     <div id="content">
         <nav>
             <ul class="nav_container">
@@ -45,8 +45,23 @@
             </div>
             <div class="form_of_contact" id="gmail">
                 <img class="logo_size" src="/images/gmail.jpg">
-                <div id="email_address"> Juliareichel@google.com</div>
+                <div id="email_container">
+                    <a target= "_blank" id="email_address" href="mailto:juliareichel@google.com">Email Me</a>
+                </div>
             </div>
+
+            <h2 id="contact_you">Contact You</h2>
+            <p id="form_instructions">If you would like me to contact you, leave your email below</p>
+            
+            <form action="/data" method="POST">
+                <input name="text-input" placeholder="Insert Email"></input>
+                <br/>
+                <input id="submit_button" type="submit" />
+            </form>
+
+            <h4> List of contacts: </h4>
+            <div id="email_list"></div> 
+
         </div>
     </div>
   </body>
