@@ -41,6 +41,11 @@
     padding-left: 8px;
 }
 
+h4 {
+    margin-bottom: 10px;
+}
+
 #email_list {
     margin-bottom: 50px;
+    font-size: 12px;
 }
