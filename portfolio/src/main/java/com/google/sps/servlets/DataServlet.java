@@ -20,6 +20,7 @@ import com.google.appengine.api.datastore.Entity;
 import com.google.appengine.api.datastore.PreparedQuery;
 import com.google.appengine.api.datastore.Query;
 import com.google.appengine.api.datastore.Query.SortDirection;
+import com.google.appengine.api.datastore.FetchOptions;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -29,7 +30,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-/** Servlet that returns some example content. TODO: modify this file to handle comments data */
 @WebServlet("/data")
 public class DataServlet extends HttpServlet {
 
@@ -64,9 +64,10 @@ public class DataServlet extends HttpServlet {
     Query query = new Query("Email").addSort("timestamp", SortDirection.DESCENDING);
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
     PreparedQuery results = datastore.prepare(query);
+    List<Entity> email_entities = results.asList(FetchOptions.Builder.withLimit(3));
 
     List<String> emails = new ArrayList<>();
-    for (Entity entity : results.asIterable()) {
+    for (Entity entity : email_entities) {
       long id = entity.getKey().getId();
       String email = (String) entity.getProperty("email");
       long timestamp = (long) entity.getProperty("timestamp");
