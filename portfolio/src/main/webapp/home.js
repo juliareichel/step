@@ -1,6 +1,6 @@
 function getContact() {
     fetch('/data').then(response => response.json()).then((emails) => {
-        document.getElementById('email_list').innerText = emails;
+        document.getElementById('email_list').innerText = emails.join('\n');
     });
 }
 

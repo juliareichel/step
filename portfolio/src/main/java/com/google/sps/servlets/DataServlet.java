@@ -15,8 +15,7 @@
 package com.google.sps.servlets;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import static java.lang.System.out;
+import java.util.*;
 import com.google.gson.Gson;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -29,6 +28,11 @@ public class DataServlet extends HttpServlet {
    private ArrayList<String> emails;
 
   @Override
+  public void init() {
+    emails = new ArrayList<>();
+  }
+
+  @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
     response.setContentType("application/json;");
     String json = new Gson().toJson(emails);
@@ -37,10 +41,11 @@ public class DataServlet extends HttpServlet {
 
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
-
-      emails = new ArrayList<>();
       String email = getEmail(request);
-      emails.add(email);
+
+      if (email != "") {
+        emails.add(email);
+      }
 
       response.setContentType("text/html");
       response.sendRedirect("/index.html");
@@ -48,9 +53,10 @@ public class DataServlet extends HttpServlet {
 
   private String getEmail(HttpServletRequest request) {
     String value = request.getParameter("text-input");
-    if (value == null) {
-      return "";
+    if (value.contains(".com") || value.contains(".net") ||
+      value.contains(".org") || value.contains(".edu")) {
+        return value;
     }
-    return value;
+    return "";
   }
 }
