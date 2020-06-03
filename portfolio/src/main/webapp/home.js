@@ -14,8 +14,8 @@ function getContact() {
 // }
 
 function getLimit() {
-    var limit = document.getElementById("quantity");
-    var value = limit.options[limit.selectedIndex].value;
+    var value = document.getElementById("quantity_value").value;
+    console.log(value)
     return value;
 }
 
