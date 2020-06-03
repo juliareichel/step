@@ -19,6 +19,11 @@ function getLimit() {
     return value;
 }
 
+function deleteContact() {
+  const request = new Request('/delete-data', {method: 'POST'});
+  fetch(request).then(response => getContact());
+}
+
 function open_linkedin() {
     window.open("https://www.linkedin.com/in/juliareichel/");
 }
