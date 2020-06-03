@@ -67,7 +67,6 @@ public class DataServlet extends HttpServlet {
     PreparedQuery results = datastore.prepare(query);
 
     int userInput = getUserInput(request);
-    System.out.print("userInput: " + userInput);
 
     List<Entity> email_entities = results.asList(FetchOptions.Builder.withLimit(userInput));
 
