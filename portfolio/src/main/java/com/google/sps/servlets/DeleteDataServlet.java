@@ -30,15 +30,8 @@ public class DeleteDataServlet extends HttpServlet {
 
     List<String> email_entities = new ArrayList<>();
     for (Entity entityKey : results.asIterable()){
-      System.out.print("*********" + entityKey.getKey());
       datastore.delete(entityKey.getKey());
     } 
-
-    // Entity emailEntity = new Entity("Email");
-    // Key emailEntityKey = emailEntity.getKey();
-
-    // // Key emailKey = KeyFactory.createKey("Email");
-    // datastore.delete(emailEntityKey);
   }
 
 }
