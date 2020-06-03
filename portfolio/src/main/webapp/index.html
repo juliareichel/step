@@ -37,40 +37,50 @@
             <img class="portrait" src="/images/myself7.jpg">
         </div>
 
-        <div id="contact_container">
-            <h2 id="contact_header">Contact Me</h2>
-            <div class="form_of_contact">
+        <div id="communication_corner">
+          <h2>Communication Corner</h2>
+
+            <div class="contact_container" id="contact_me">
+              <h3 id="contact_header">Contact Me</h3>
+              <div class="form_of_contact">
                 <img class="logo_size" id="linked_in" src="/images/linkedin.jpg" onclick="open_linkedin()">
                 <div id="site_name">Linked In</div>
-            </div>
-            <div class="form_of_contact" id="gmail">
+              </div>
+              <div class="form_of_contact" id="gmail">
                 <img class="logo_size" src="/images/gmail.jpg">
                 <div id="email_container">
                     <a target= "_blank" id="email_address" href="mailto:juliareichel@google.com">Email Me</a>
                 </div>
+              </div>
             </div>
 
-            <h2 id="contact_you">Contact You</h2>
-            <p id="form_instructions">If you would like me or others to contact you,
-                leave your email below
-            </p>
+            <div class="contact_container">
+              <h3 id="contact_you">Contact You</h3>
+              <p id="form_instructions">If you would like me or others to contact you,
+                  leave your email below
+              </p>
             
-            <form action="/data" method="POST">
+              <form action="/data" method="POST">
                 <input name="text-input" placeholder="Insert Email"></input>
-                <br/>
                 <input id="submit_button" type="submit" />
-            </form>
+              </form>
 
-            <label id="number_field" for="quantity">Num of Contacts to Display:</label>
-            <input type="number" id="quantity_value" name="quantity" value="1" min="1" max="10">
-            <button id="refresh_button" onclick="getContact()">Refresh</button>
+              <label id="number_field" for="quantity">Num of Contacts to Display:</label>
+              <input type="number" id="quantity_value" name="quantity" value="1" min="1" max="10">
+              <button id="refresh_button" onclick="getContact()">Refresh</button>
+              
+              <div id="contact_list"> 
+                <h4>List of Contacts:</h4>
+                <div id="email_list"></div> 
+              </div>
 
-            <h4> List of Contacts: </h4>
-            <div id="email_list"></div> 
-
-            <button id="delete_button" onclick="deleteContact()">Delete</button>
-
+              <div id="delete_container">
+                <h4>To Reload the Email List:</h4>
+                <button id="delete_button" onclick="deleteContact()">Delete</button>
+              </div>
+            </div>
         </div>
+
     </div>
   </body>
 </html>
