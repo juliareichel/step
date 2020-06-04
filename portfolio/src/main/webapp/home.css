@@ -99,6 +99,18 @@ h4 {
   margin-left: 293px;
 }
 
-.test{
-  color: red;
+.email_div_spacing {
+  margin-bottom: 10px;
+}
+
+.button_spacing {
+  margin-left: 10px;
+}
+
+.hide {
+  visibility: hidden;
+}
+
+.show {
+  visibility: visible;
 }
