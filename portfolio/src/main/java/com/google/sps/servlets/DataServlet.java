@@ -88,7 +88,24 @@ public class DataServlet extends HttpServlet {
   private int getUserInput(HttpServletRequest request) {
     String userInputString = request.getParameter("quantity");
     int userRequestedQuantity;
-    userRequestedQuantity = Integer.parseInt(userInputString);
+
+    if (userInputString == null) {
+	    userRequestedQuantity = -1;
+    }
+
+    try {
+    	userRequestedQuantity = Integer.parseInt(userInputString);
+    }
+    catch (NumberFormatException e){
+	System.err.println("Could not convert to int: " + userInputString);
+     	 return -1;
+    }
+
+    if (userRequestedQuantity < 1 || userRequestedQuantity > 10) {
+      System.err.println("User request out of range: " + userInputString);
+      return -1;
+    }
+
     return userRequestedQuantity;
   }
 }
