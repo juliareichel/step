@@ -66,11 +66,12 @@
               </form>
 
               <label id="number_field" for="quantity">Num of Contacts to Display:</label>
-              <input type="number" id="quantity_value" name="quantity" value="1" min="1" max="10">
+              <input type="number" id="quantity_value" name="quantity" value="5" min="1" max="10">
               <button id="refresh_button" onclick="getContact()">Refresh</button>
               
               <div id="contact_list"> 
-                <h4>List of Contacts:</h4>
+                <h4 id="contacts_title">List of Contacts:</h4>
+                <p id="disclaimer">If you don't see any emails listed below then the database is currently empty</p>
                 <div id="email_list"></div> 
               </div>
 
