@@ -1,5 +1,6 @@
 package com.google.sps.servlets;
 
+import static com.google.sps.servlets.DataStoreKeys.EMAIL_ENTITY;
 import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
 import com.google.appengine.api.datastore.Entity;
@@ -22,7 +23,7 @@ public class DeleteContactServlet extends HttpServlet {
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
-    Query query = new Query("Email");
+    Query query = new Query(EMAIL_ENTITY);
     PreparedQuery results = datastore.prepare(query);
 
     List<String> email_entities = new ArrayList<>();
