@@ -40,7 +40,7 @@ public class DataServlet extends HttpServlet {
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
       String email = getEmail(request);
       long timestamp = System.currentTimeMillis();
-
+      
       Entity emailEntity = new Entity(EMAIL_ENTITY);
       if (email != "") {
         emailEntity.setProperty("email", email);

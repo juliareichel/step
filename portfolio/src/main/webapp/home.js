@@ -1,8 +1,6 @@
 function getContact() {
     var quantity = getLimit();
     fetch('/data?quantity='+ quantity).then(response => response.json()).then((emails) => {
-        // document.getElementById('email_list').innerText = emails.join('\n');
-
         emails.forEach(email => {
           var singleEmailDiv = document.createElement('div');
           singleEmailDiv.classList.add("email_div_spacing");
@@ -14,16 +12,23 @@ function getContact() {
           singleEmailDiv.appendChild(replyButton);
           var replyForm = document.createElement('form');
           replyForm.method = 'POST';
+          replyForm.action = '/reply?replyId=${replyId}';
           singleEmailDiv.appendChild(replyForm);
 
           replyButton.addEventListener("click", () => {
             replyButton.classList.add("hide");
             var replyInput = document.createElement('textarea');
+            replyInput.name = "reply-input";
             replyForm.appendChild(replyInput);
             var submitReplyButton = document.createElement('button');
             submitReplyButton.innerText = "Reply";
             replyForm.appendChild(submitReplyButton);
             submitReplyButton.classList.add("button_spacing");
+              submitReplyButton.addEventListener("click", () => {
+                fetch(replyForm.action).then(response => response.json().then((replies) => {
+                  //add to proper original comment
+                }))
+              })
           })
         })
     });
