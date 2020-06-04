@@ -26,6 +26,20 @@
     text-decoration: none;
 }
 
+h2 {
+  font-weight: bold;
+  text-decoration: italic;
+}
+
+h3 {
+  font-size: 20px;
+}
+
+#contact_me {
+  float: left;
+  margin-right: 45px;
+}
+
 #contact_you {
     margin-bottom: 2px;
 }
@@ -33,19 +47,46 @@
 #form_instructions {
     font-size: 12px;
     margin-bottom: 35px;
+    font-weight: normal;
 }
 
 #submit_button {
     margin-top: 10px;
     padding-right: 8px;
     padding-left: 8px;
+    margin-bottom: 20px;
+}
+
+#quantity_value {
+    max-width: 30px;
+}
+
+#number_field {
+    font-size: 14px;
+    font-weight: bold;
+}
+
+#refresh_button {
+    margin-top: 10px;
+    padding-right: 8px;
+    padding-left: 8px;
 }
 
 h4 {
+    font-size: 14px;
     margin-bottom: 10px;
+    display: inline-block;
+}
+
+#contact_list {
+  margin-left: 293px;
 }
 
 #email_list {
     margin-bottom: 50px;
     font-size: 12px;
+}
+
+#delete_container {
+  margin-left: 293px;
 }

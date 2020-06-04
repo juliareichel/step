@@ -64,7 +64,10 @@ public class DataServlet extends HttpServlet {
     Query query = new Query("Email").addSort("timestamp", SortDirection.DESCENDING);
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
     PreparedQuery results = datastore.prepare(query);
-    List<Entity> email_entities = results.asList(FetchOptions.Builder.withLimit(3));
+
+    int requestedQuantity = getUserInput(request);
+
+    List<Entity> email_entities = results.asList(FetchOptions.Builder.withLimit(requestedQuantity));
 
     List<String> emails = new ArrayList<>();
     for (Entity entity : email_entities) {
@@ -80,5 +83,29 @@ public class DataServlet extends HttpServlet {
     response.setContentType("application/json;");
     String json = new Gson().toJson(emails);
     response.getWriter().println(json);
+  }
+
+  private int getUserInput(HttpServletRequest request) {
+    String userInputString = request.getParameter("quantity");
+    int userRequestedQuantity;
+
+    if (userInputString == null) {
+	    userRequestedQuantity = -1;
+    }
+
+    try {
+    	userRequestedQuantity = Integer.parseInt(userInputString);
+    }
+    catch (NumberFormatException e){
+	System.err.println("Could not convert to int: " + userInputString);
+     	 return -1;
+    }
+
+    if (userRequestedQuantity < 1 || userRequestedQuantity > 10) {
+      System.err.println("User request out of range: " + userInputString);
+      return -1;
+    }
+
+    return userRequestedQuantity;
   }
 }
