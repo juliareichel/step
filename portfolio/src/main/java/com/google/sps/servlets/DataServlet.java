@@ -14,6 +14,7 @@
 
 package com.google.sps.servlets;
 
+import static com.google.sps.servlets.DataStoreKeys.EMAIL_ENTITY;
 import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
 import com.google.appengine.api.datastore.Entity;
@@ -33,12 +34,14 @@ import javax.servlet.http.HttpServletResponse;
 @WebServlet("/data")
 public class DataServlet extends HttpServlet {
 
+  private static final int DEFAULT_QUANTITY = 5;
+
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
       String email = getEmail(request);
       long timestamp = System.currentTimeMillis();
 
-      Entity emailEntity = new Entity("Email");
+      Entity emailEntity = new Entity(EMAIL_ENTITY);
       if (email != "") {
         emailEntity.setProperty("email", email);
         emailEntity.setProperty("timestamp", timestamp);
@@ -61,7 +64,7 @@ public class DataServlet extends HttpServlet {
 
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-    Query query = new Query("Email").addSort("timestamp", SortDirection.DESCENDING);
+    Query query = new Query(EMAIL_ENTITY).addSort("timestamp", SortDirection.DESCENDING);
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
     PreparedQuery results = datastore.prepare(query);
 
@@ -90,20 +93,20 @@ public class DataServlet extends HttpServlet {
     int userRequestedQuantity;
 
     if (userInputString == null) {
-	    userRequestedQuantity = -1;
+	    return DEFAULT_QUANTITY;
     }
 
     try {
     	userRequestedQuantity = Integer.parseInt(userInputString);
     }
     catch (NumberFormatException e){
-	System.err.println("Could not convert to int: " + userInputString);
-     	 return -1;
+	     System.err.println("Could not convert to int: " + userInputString);
+     	 return DEFAULT_QUANTITY;
     }
 
     if (userRequestedQuantity < 1 || userRequestedQuantity > 10) {
       System.err.println("User request out of range: " + userInputString);
-      return -1;
+      return DEFAULT_QUANTITY;
     }
 
     return userRequestedQuantity;

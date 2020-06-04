@@ -78,8 +78,16 @@ h4 {
     display: inline-block;
 }
 
+#contacts_title {
+  margin-bottom: 2px;
+}
+
 #contact_list {
   margin-left: 293px;
+}
+
+#disclaimer {
+    font-size: 12px;
 }
 
 #email_list {
