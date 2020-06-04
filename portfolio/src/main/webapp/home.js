@@ -2,25 +2,25 @@ function getContact() {
     var quantity = getLimit();
     fetch('/data?quantity='+ quantity).then(response => response.json()).then((emails) => {
         emails.forEach(email => {
-          var singleEmailDiv = document.createElement('div');
+          const singleEmailDiv = document.createElement('div');
           singleEmailDiv.classList.add("email_div_spacing");
           singleEmailDiv.innerText = email;
           document.getElementById('email_list').appendChild(singleEmailDiv);
-          var replyButton = document.createElement('button');
+          const replyButton = document.createElement('button');
           replyButton.innerText = "Reply to this Person";
           replyButton.classList.add("button_spacing");
           singleEmailDiv.appendChild(replyButton);
-          var replyForm = document.createElement('form');
+          const replyForm = document.createElement('form');
           replyForm.method = 'POST';
           replyForm.action = '/reply?replyId=${replyId}';
           singleEmailDiv.appendChild(replyForm);
 
           replyButton.addEventListener("click", () => {
             replyButton.classList.add("hide");
-            var replyInput = document.createElement('textarea');
+            const replyInput = document.createElement('textarea');
             replyInput.name = "reply-input";
             replyForm.appendChild(replyInput);
-            var submitReplyButton = document.createElement('button');
+            const submitReplyButton = document.createElement('button');
             submitReplyButton.innerText = "Reply";
             replyForm.appendChild(submitReplyButton);
             submitReplyButton.classList.add("button_spacing");
