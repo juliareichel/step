@@ -21,12 +21,29 @@ import javax.servlet.http.HttpServletResponse;
 public class ReplyServlet extends HttpServlet {
 
   @Override
+  public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    String userReply = request.getParameter("reply-input");
+    long replyTimestamp = System.currentTimeMillis();
+
+    // Key replyKey = datastore.newKeyFactory().addAncestors(PathElement.of(EMAIL_ENTITY).setKind(REPLIES_ENTITY).newKey("reply"));
+    // Entity replyEntity = Entity.newBuilder(replyKey);
+    Entity replyEntity = new Entity(REPLIES_ENTITY, emailEntity.getKey());
+    replyEntity.setProperty("userReply", userReply);
+    replyEntity.setProperty("replyTimestamp", replyTimestamp);
+
+    DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+    datastore.put(replyEntity);
+
+    response.setContentType("text/html");
+    response.sendRedirect("/index.html");
+  }
+
+  @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
     Query replyQuery = new Query(REPLIES_ENTITY).addSort("timestamp", SortDirection.DESCENDING);
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
     PreparedQuery replyResults = datastore.prepare(replyQuery);
 
-    String userReply = request.getParameter("reply-input");
     long timestamp = System.currentTimeMillis();
     // long id = entity.getKey().getId();
 
@@ -41,11 +58,6 @@ public class ReplyServlet extends HttpServlet {
 
       replies.add(reply);
     }
-
-      // replies.setProperty("replyId", replyId);
-      // replies.setProperty("userReply", userReply);
-      // replies.setProperty("timestamp", timestamp);
-
     datastore.put(replies);
 
     response.setContentType("application/json;");

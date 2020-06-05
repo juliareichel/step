@@ -15,6 +15,7 @@
 package com.google.sps.servlets;
 
 import static com.google.sps.servlets.DataStoreKeys.EMAIL_ENTITY;
+import com.google.sps.data.EmailObject;
 import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
 import com.google.appengine.api.datastore.Entity;
@@ -40,13 +41,15 @@ public class DataServlet extends HttpServlet {
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
       String email = getEmail(request);
       long timestamp = System.currentTimeMillis();
-      long postId = getId(request);
+      // long postId = getId(request);
+      Entity specificReply = .....
       
       Entity emailEntity = new Entity(EMAIL_ENTITY);
       if (email != "") {
         emailEntity.setProperty("email", email);
         emailEntity.setProperty("timestamp", timestamp);
-        emailEntity.setProperty("postId", postId)
+        emailEntity.setProperty("reply", specificReply);
+        // emailEntity.setProperty("postId", postId)
         DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
         datastore.put(emailEntity);
       }

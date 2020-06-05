@@ -19,10 +19,10 @@ function createEmailNode(email) {
   replyButton.innerText = "Reply to this Person";
   replyButton.classList.add("button_spacing");
   singleEmailDiv.appendChild(replyButton);
-  replyButton.addEventListener("click", () => createReply());  
+  replyButton.addEventListener("click", () => promptReplyNode());  
 }
 
-function createReply() {
+function promptReplyNode() {
   replyButton.classList.add("hide");
 
   const replyForm = document.createElement('form');
@@ -43,8 +43,15 @@ function createReply() {
 
 function submitReply() {
   fetch(replyForm.action).then(response => response.json()).then((replies) => {
-    //add to proper original comment
-  })
+    replies.forEach((reply) => createReplyNode(reply));
+      //below each parents (Based on this)
+  });
+}
+
+function createReplyNode() {
+  const singleReplyDiv = document.createElement('div');
+  singleReplyDiv.innerText = reply;
+
 }
 
 //For Reference Purposes:
