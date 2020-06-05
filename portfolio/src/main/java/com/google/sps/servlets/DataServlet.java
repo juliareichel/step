@@ -40,11 +40,13 @@ public class DataServlet extends HttpServlet {
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
       String email = getEmail(request);
       long timestamp = System.currentTimeMillis();
+      long postId = getId(request);
       
       Entity emailEntity = new Entity(EMAIL_ENTITY);
       if (email != "") {
         emailEntity.setProperty("email", email);
         emailEntity.setProperty("timestamp", timestamp);
+        emailEntity.setProperty("postId", postId)
         DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
         datastore.put(emailEntity);
       }
@@ -62,6 +64,10 @@ public class DataServlet extends HttpServlet {
     return "";
   }
 
+  private long getId(HttpServletRequest request) {
+    return request.getKey().getId();
+  }
+
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
     Query query = new Query(EMAIL_ENTITY).addSort("timestamp", SortDirection.DESCENDING);
@@ -74,7 +80,7 @@ public class DataServlet extends HttpServlet {
 
     List<String> emails = new ArrayList<>();
     for (Entity entity : email_entities) {
-      long id = entity.getKey().getId();
+      long postId = entity.getKey().getId();
       String email = (String) entity.getProperty("email");
       long timestamp = (long) entity.getProperty("timestamp");
 

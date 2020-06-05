@@ -19,18 +19,21 @@ function createEmailNode(email) {
   replyButton.innerText = "Reply to this Person";
   replyButton.classList.add("button_spacing");
   singleEmailDiv.appendChild(replyButton);
+  replyButton.addEventListener("click", () => createReply());  
+}
+
+function createReply() {
+  replyButton.classList.add("hide");
+
   const replyForm = document.createElement('form');
   replyForm.method = 'POST';
   replyForm.action = '/reply?replyId=${replyId}';
   singleEmailDiv.appendChild(replyForm);
-  replyButton.addEventListener("click", () => onReply());  
-}
 
-function onReply() {
-  replyButton.classList.add("hide");
   const replyInput = document.createElement('textarea');
   replyInput.name = "reply-input";
   replyForm.appendChild(replyInput);
+  
   const submitReplyButton = document.createElement('button');
   submitReplyButton.innerText = "Reply";
   replyForm.appendChild(submitReplyButton);
