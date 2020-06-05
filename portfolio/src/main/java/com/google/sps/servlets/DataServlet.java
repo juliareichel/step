@@ -15,7 +15,8 @@
 package com.google.sps.servlets;
 
 import static com.google.sps.servlets.DataStoreKeys.EMAIL_ENTITY;
-import com.google.sps.data.EmailObject;
+import static com.google.sps.servlets.DataStoreKeys.REPLIES_ENTITY;
+import com.google.sps.data.Post;
 import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
 import com.google.appengine.api.datastore.Entity;
@@ -23,6 +24,7 @@ import com.google.appengine.api.datastore.PreparedQuery;
 import com.google.appengine.api.datastore.Query;
 import com.google.appengine.api.datastore.Query.SortDirection;
 import com.google.appengine.api.datastore.FetchOptions;
+import com.google.appengine.api.datastore.Key;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -42,14 +44,14 @@ public class DataServlet extends HttpServlet {
       String email = getEmail(request);
       long timestamp = System.currentTimeMillis();
       // long postId = getId(request);
-      Entity specificReply = .....
+      // Entity specificReply = .....
       
       Entity emailEntity = new Entity(EMAIL_ENTITY);
       if (email != "") {
         emailEntity.setProperty("email", email);
         emailEntity.setProperty("timestamp", timestamp);
-        emailEntity.setProperty("reply", specificReply);
-        // emailEntity.setProperty("postId", postId)
+        // emailEntity.setProperty("reply", specificReply);
+        emailEntity.setProperty("postId", emailEntity.getKey().getId());
         DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
         datastore.put(emailEntity);
       }
@@ -67,33 +69,42 @@ public class DataServlet extends HttpServlet {
     return "";
   }
 
-  private long getId(HttpServletRequest request) {
-    return request.getKey().getId();
-  }
-
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-    Query query = new Query(EMAIL_ENTITY).addSort("timestamp", SortDirection.DESCENDING);
+    Query emailQuery = new Query(EMAIL_ENTITY).addSort("timestamp", SortDirection.DESCENDING);
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
-    PreparedQuery results = datastore.prepare(query);
+    PreparedQuery preparedEmailQuery = datastore.prepare(emailQuery);
 
     int requestedQuantity = getUserInput(request);
 
-    List<Entity> email_entities = results.asList(FetchOptions.Builder.withLimit(requestedQuantity));
+    List<Entity> email_entities = preparedEmailQuery.asList(FetchOptions.Builder.withLimit(requestedQuantity));
+    List<Post> posts = new ArrayList<>();
 
-    List<String> emails = new ArrayList<>();
-    for (Entity entity : email_entities) {
-      long postId = entity.getKey().getId();
-      String email = (String) entity.getProperty("email");
-      long timestamp = (long) entity.getProperty("timestamp");
+    for (Entity emailEntity : email_entities) {
+      long postId = emailEntity.getKey().getId();
+      String email = (String) emailEntity.getProperty("email");
+      long timestamp = (long) emailEntity.getProperty("timestamp");
+      // ArrayList<String> replies = emailEntity.getPropery("replies");
 
-      if (!emails.contains(email)){
-        emails.add(email);  
+      Post newPost = new Post(email, postId);
+
+      Query replyQuery = new Query(REPLIES_ENTITY).addSort("timestamp", SortDirection.DESCENDING);
+      PreparedQuery preparedReplyQuery = datastore.prepare(replyQuery); 
+
+      for (Entity replyEntity : preparedReplyQuery.asIterable()) {
+        if (replyEntity.getParent().getId() == postId) {
+          String replyData = (String) replyEntity.getProperty("replyData");
+          newPost.addReply(replyData);
+        }
+      }
+
+      if (!posts.contains(newPost)){
+        posts.add(newPost);  
       }
     }
 
     response.setContentType("application/json;");
-    String json = new Gson().toJson(emails);
+    String json = new Gson().toJson(posts);
     response.getWriter().println(json);
   }
 

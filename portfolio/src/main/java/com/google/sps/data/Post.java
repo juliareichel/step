@@ -4,12 +4,14 @@ package com.google.sps.data;
 
 import java.util.ArrayList;
 
-public class EmailObject {
+public class Post {
   private String email;
   private ArrayList<String> replies;
+  private long postId; 
 
-  public EmailObject(String e) {
+  public Post(String e, long id) {
     email = e;
+    postId = id;
     replies = new ArrayList<>();
   }
 
@@ -19,6 +21,10 @@ public class EmailObject {
 
   public ArrayList<String> getReplies() {
     return replies;
+  }
+
+  public long getId() {
+    return postId;
   }
 
   public void addReply(String reply) {
