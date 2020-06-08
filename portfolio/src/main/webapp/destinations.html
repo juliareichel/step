@@ -5,8 +5,11 @@
     <title>Dream Destinations</title>
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="destinations.css">
+    <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyArmF56b2WLYnoEoMaOUjm0svwnVYiWu_k&callback=initMap"
+    type="text/javascript"></script>
+    <script src="destinations.js"></script>
   </head>
-  <body>
+  <body onload="createMap();">
     <div id="content">
         <nav>
             <ul class="nav_container">
@@ -56,6 +59,9 @@
             <div class="name">Costa Rica</div>
           </div>
         </div>
+
+        <h2>Map of Places</h2>
+        <div id="map"></div>
     </div>
   </body>
 </html>
