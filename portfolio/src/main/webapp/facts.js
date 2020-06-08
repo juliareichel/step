@@ -1,4 +1,4 @@
-const QUOTES =
+const FACTS =
   ['My middle name is Rose',
     'I was captain of my high school basketball & softball teams',
     'My favorite color is purple',
