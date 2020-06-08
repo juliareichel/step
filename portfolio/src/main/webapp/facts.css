@@ -12,9 +12,9 @@
 
 #fact_container {
     padding: 25px;
-    border-color: #F08080;
     text-align: center;
     font-weight: bold;
+    border: 2px solid #F08080; 
 }
 
 .random_fact {

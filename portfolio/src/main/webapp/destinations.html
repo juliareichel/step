@@ -5,8 +5,11 @@
     <title>Dream Destinations</title>
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="destinations.css">
+    <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyArmF56b2WLYnoEoMaOUjm0svwnVYiWu_k&libraries=places"
+    type="text/javascript"></script>
+    <script src="destinations.js"></script>
   </head>
-  <body>
+  <body onload="createMap();">
     <div id="content">
         <nav>
             <ul class="nav_container">
@@ -25,15 +28,15 @@
         <div class="vacation_spots">
           <div class = "destination">
             <img src="/images/capri.jpeg"> 
-            <div class="name">Capri</div>
+            <div class="name">Capri, Italy</div>
           </div>
           <div class = "destination">
             <img src="/images/bondi.jpeg"> 
-            <div class="name">Bondi</div>
+            <div class="name">Bondi, Australia</div>
           </div>
           <div class = "destination">
             <img src="/images/mykonos.jpeg"> 
-            <div class="name">Mykonos</div>
+            <div class="name">Mykonos, Greece</div>
           </div>
            <div class = "destination">
             <img src="/images/panama.jpeg"> 
@@ -41,21 +44,25 @@
           </div>
           <div class = "destination">
             <img src="/images/rhodes.jpeg"> 
-            <div class="name">Rhodes</div>
+            <div class="name">Rhodes, Greece</div>
           </div>
           <div class = "destination">
             <img src="/images/venice.jpeg">
-            <div class="name">Venice</div>
+            <div class="name">Venice, Italy</div>
           </div>
           <div class = "destination">
             <img src="/images/santorini.jpeg">
-            <div class="name">Santorini</div>
+            <div class="name">Santorini, Greece</div>
           </div>
           <div class = "destination">
             <img src="/images/costarica.jpeg">
             <div class="name">Costa Rica</div>
           </div>
         </div>
+
+        <h2>Map of Places</h2>
+        <input id="search" type="text" placeholder="Search Place">
+        <div id="map"></div>
     </div>
   </body>
 </html>
