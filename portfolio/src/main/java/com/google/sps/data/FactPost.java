@@ -1,8 +1,7 @@
-/* Class representing a user's "post" (fun fact)*/
-
 package com.google.sps.data;
 import java.util.ArrayList;
 
+/* Class representing a user's "post" (fun fact)*/
 public class FactPost {
   private String fact;
   private long postId; 
@@ -16,7 +15,7 @@ public class FactPost {
   public FactPost(String message, long id, String time) {
     fact = message;
     postId = id;
-    postTime = String.valueOf(System.currentTimeMillis());
+    postTime = time;
   }
 
   public String getFact (){
