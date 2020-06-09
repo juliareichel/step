@@ -15,15 +15,15 @@ public class LogInServlet extends HttpServlet {
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
 
     UserService userService = UserServiceFactory.getUserService();
-    String URLRedirect = "/facts.html";
+    String urlRedirect = "/facts.html";
 
     if (userService.isUserLoggedIn()){
       String userEmail = userService.getCurrentUser().getEmail();
-      response.sendRedirect(URLRedirect);
+      response.sendRedirect(urlRedirect);
     }
     else {
-      String loginURL = userService.createLoginURL(URLRedirect);
-      response.getWriter().println("<p>Login<a href=\"" + loginURL + "\"> here</a>.</p>");
+      String loginUrl = userService.createLoginURL(urlRedirect);
+      response.getWriter().println("<p>Login<a href=\"" + loginUrl + "\"> here</a>.</p>");
     }
   }
 }

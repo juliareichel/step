@@ -15,15 +15,15 @@ public class LogOutServlet extends HttpServlet {
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
 
     UserService userService = UserServiceFactory.getUserService();
-    String URLRedirect = "/index.html";
+    String urlRedirect = "/index.html";
 
     if (userService.isUserLoggedIn()){
       String userEmail = userService.getCurrentUser().getEmail();
-      String logOutURL = userService.createLogoutURL(URLRedirect);
-      response.getWriter().println("<p>Logout <a href=\"" + logOutURL + "\">here</a>.</p>");
+      String logOutUrl = userService.createLogoutURL(urlRedirect);
+      response.getWriter().println("<p>Logout <a href=\"" + logOutUrl + "\">here</a>.</p>");
     }
     else {
-      response.sendRedirect(URLRedirect);
+      response.sendRedirect(urlRedirect);
     }
   }
 }
