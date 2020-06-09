@@ -13,6 +13,7 @@ function addRandomFact() {
 
 function getPost() {
   document.getElementById('new_facts_container').innerHTML = "";
+  // fetch('/login').then(response => console.log(response));
   fetch('/share-fact').then(response => response.json()).then((posts) => {
     posts.forEach((post) => createFactNode(post));
   });
@@ -21,7 +22,7 @@ function getPost() {
 function createFactNode(post) {
   const singlePostDiv = document.createElement('div');
   singlePostDiv.classList.add("post_div");
-  singlePostDiv.innerText = (post.fact);
+  singlePostDiv.innerText = (post.username + ": " + post.fact + "\n" + post.postTime);
   const replyButton = document.createElement('button');
   replyButton.innerText = "Reply to this Person";
   replyButton.classList.add("button_spacing");

@@ -18,6 +18,7 @@ public class LogInServlet extends HttpServlet {
     String URLRedirect = "/facts.html";
 
     if (userService.isUserLoggedIn()){
+      String userEmail = userService.getCurrentUser().getEmail();
       response.sendRedirect(URLRedirect);
     }
     else {
