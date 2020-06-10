@@ -21,7 +21,7 @@ function getPost() {
 function createFactNode(post) {
   const singlePostDiv = document.createElement('div');
   singlePostDiv.classList.add("post_div");
-  singlePostDiv.innerText = ("PostTime: " + post.postTime + "- " + post.fact);
+  singlePostDiv.innerText = (post.username + ": " + post.fact + "\n" + post.postTime);
   const replyButton = document.createElement('button');
   replyButton.innerText = "Reply to this Person";
   replyButton.classList.add("button_spacing");

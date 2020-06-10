@@ -26,6 +26,15 @@
   border: 2px solid black;
 }
 
+#logout_button {
+  float: right;
+  padding: 10px;
+  padding-left: 25px;
+  padding-right: 25px;
+  font-size: 16px;
+  font-weight: bold;
+}
+
 #purpose {
   font-size: 14px;
   margin-top: -10px;

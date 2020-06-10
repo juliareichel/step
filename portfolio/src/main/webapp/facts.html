@@ -25,7 +25,11 @@
         <button id="fact_btn" onclick="addRandomFact()">Click to see a fun fact!</button>
         <div id="fact_container"></div>
 
-        <h2>Share Your #FACTS</h2>
+        <h2>Share Your #FACTS</h2> 
+        <form action="/logout">
+            <input id="logout_button" type="submit" value="Logout"></input>
+        </form>
+
         <p id="purpose">This is a space dedicated to learn about each other's interests</p>
         <form action="/share-fact" method="POST" id="fact_form">
                 <textarea name="text-input" id="fact_input" placeholder="Share your fun fact here!"></textarea>

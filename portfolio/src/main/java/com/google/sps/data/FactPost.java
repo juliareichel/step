@@ -9,8 +9,10 @@ public class FactPost {
   private String fact;
   private long postId; 
   private String postTime;
+  private String username;
 
-  public FactPost(String message) {
+  public FactPost(String name, String message) {
+    username = name;
     fact = message;
     long currentTime = System.currentTimeMillis();
     Date date = new Date(currentTime);
@@ -20,7 +22,8 @@ public class FactPost {
     postTime = simpleDate.format(date);
   }
 
-  public FactPost(String message, long id, String time) {
+  public FactPost(String name, String message, long id, String time) {
+    username = name;
     fact = message;
     postId = id;
     postTime = time;
@@ -36,5 +39,9 @@ public class FactPost {
 
   public String getTime() {
     return postTime;
+  }
+
+  public String getUsername() {
+    return username;
   }
 }
