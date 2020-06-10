@@ -20,6 +20,7 @@ import com.google.appengine.api.datastore.Key;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.io.*;
 import com.google.gson.Gson;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -45,8 +46,9 @@ public class FactServlet extends HttpServlet {
 
       FactPost post = new FactPost(username, fact, postId, postTime);
 
-      Filter keyFilter = new FilterPredicate("postId", FilterOperator.EQUAL, postId);
-      Query replyQuery = new Query(REPLIES_ENTITY).setFilter(keyFilter);
+      // Filter keyFilter = new FilterPredicate("postId", FilterOperator.EQUAL, postId);
+      Query replyQuery = new Query(REPLIES_ENTITY);
+      // .setFilter(keyFilter);
       replyQuery.addSort("replyTime", SortDirection.DESCENDING);
       PreparedQuery preparedReplyQuery = datastore.prepare(replyQuery); 
  
@@ -56,6 +58,7 @@ public class FactServlet extends HttpServlet {
         String replyTime = (String) replyEntity.getProperty("replyTime");
 
         Reply reply = new Reply(replyUsername, replyData, replyTime);
+        System.out.println("**********REPLY HERE*************" + reply);
 
         post.additionalReply(reply);
       }
@@ -84,7 +87,7 @@ public class FactServlet extends HttpServlet {
         factEntity.setProperty("fact", newPost.getFact());
         factEntity.setProperty("postTime", newPost.getTime());
         factEntity.setProperty("postId", factEntity.getKey().getId());
-        factEntity.setProperty("replies", newPost.getReply());
+        // factEntity.setProperty("replies", newPost.getReply());
         DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
         datastore.put(factEntity);
       }

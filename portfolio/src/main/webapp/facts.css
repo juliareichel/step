@@ -56,6 +56,10 @@
   padding: 5px;
 }
 
+.reply_text {
+  font-size: 12px;
+}
+
 .button_spacing {
   margin-left: 20px;
 }

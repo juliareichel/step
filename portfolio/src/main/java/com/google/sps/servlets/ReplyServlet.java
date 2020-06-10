@@ -18,7 +18,6 @@ import com.google.appengine.api.datastore.KeyFactory.Builder;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Enumeration;
-import java.io.*;
 import java.util.List;
 import com.google.gson.Gson;
 import javax.servlet.annotation.WebServlet;
@@ -35,12 +34,6 @@ public class ReplyServlet extends HttpServlet {
     UserService userService = UserServiceFactory.getUserService();
     String username = userService.getCurrentUser().getEmail();
 
-    System.err.println("*********************");
-    System.err.println("*********************");
-    System.err.println("*********************");
-    System.err.println("*********************");
-    System.err.println("*********************");
- 
     String replyData = request.getParameter("reply-input");
     Reply newReply = new Reply(username, replyData);
 
@@ -53,11 +46,9 @@ public class ReplyServlet extends HttpServlet {
     replyEntity.setProperty("replyData", newReply.getReply());
     replyEntity.setProperty("replyTime", newReply.getTime());
  
-    System.err.println("REPLY ENTITY!!!!!!!!!!!!!" + replyEntity.getProperty("replyData"));
- 
     datastore.put(replyEntity);
  
-    // response.setContentType("text/html");
+    response.setContentType("application/json;");
     response.sendRedirect("/facts.html");
   }
 }
