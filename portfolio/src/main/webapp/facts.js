@@ -47,11 +47,6 @@ function promptReplyNode(singlePostDiv, button, postId) {
   replyForm.appendChild(submitReplyButton);
   submitReplyButton.classList.add("button_spacing");
   singlePostDiv.appendChild(replyForm);
-  // submitReplyButton.addEventListener("click",(event) => 
-  //   fetch('/get-reply').then(response => response.json()).then((replies) => {
-  //     replies.forEach((reply) => createReplyNode(reply, postDiv));
-  //   });
-  // )
   submitReplyButton.addEventListener("click", (event) => submitReply(event, replyInput, replyForm, postId, singlePostDiv));
 }
 
@@ -67,18 +62,14 @@ function submitReply(event, replyInput, form, postId, singlePostDiv) {
     headers: {"Content-Type": 'application/x-www-form-urlencoded'}
   });
 
-  fetch(postRequest).then(response => response.json()).then((data) => {
-    console.log("HERE!", data);
-    // replies.forEach((reply) => createReplyNode(reply, singlePostDiv));
+//postRequest works but not parsing response properly
+  fetch(postRequest).then(response => response.json()).then((replies) => {
+    replies.forEach((reply) => createReplyNode(reply, singlePostDiv));
   });
-  // fetch(postRequest).then(response => console.log("RESPONSE JSON:" ,response));
-  // fetch(postRequest).then(response => console.log(response.formData()).then((data) => {
-  //       console.log(data);
-  //   }));
 }
 
-// function createReplyNode(reply, sinlgePostDiv) {
-//   const singleReplyDiv = document.createElement('div');
-//   singleReplyDiv.innerText = reply;
-//   singlePostDiv.append(singleReplyDiv);
-// }
+function createReplyNode(reply, sinlgePostDiv) {
+  const singleReplyDiv = document.createElement('div');
+  singleReplyDiv.innerText = reply;
+  singlePostDiv.append(singleReplyDiv);
+}
