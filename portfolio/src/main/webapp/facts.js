@@ -24,7 +24,12 @@ function createFactNode(post) {
   singlePostDiv.innerText = (post.username + ": " + post.fact + "\n" + post.postTime);
   const replyButton = document.createElement('button');
   replyButton.innerText = "Reply to this Person";
-  replyButton.classList.add("button_spacing");
+  replyButton.classList.add("reply_button");
   singlePostDiv.appendChild(replyButton);
   document.getElementById('new_facts_container').appendChild(singlePostDiv); 
+}
+
+function deleteFacts() {
+  const request = new Request('/delete-post', {method: 'POST'});
+  fetch(request).then(response => getPost());
 }
