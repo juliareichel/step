@@ -2,6 +2,7 @@ package com.google.sps.servlets;
 
 import static com.google.sps.servlets.DataStoreKeys.FACT_ENTITY;
 import com.google.sps.data.FactPost;
+import com.google.sps.data.Reply;
 import com.google.appengine.api.users.UserService;
 import com.google.appengine.api.users.UserServiceFactory;
 import com.google.appengine.api.datastore.DatastoreService;
@@ -37,8 +38,9 @@ public class FactServlet extends HttpServlet {
       String username = (String) factEntity.getProperty("username");
       String fact = (String) factEntity.getProperty("fact");
       String postTime = (String) factEntity.getProperty("postTime");
+      ArrayList<Reply> replies = (ArrayList) factEntity.getProperty("replies");
 
-      FactPost post = new FactPost(username, fact, postId, postTime);
+      FactPost post = new FactPost(username, fact, postId, postTime, replies);
       posts.add(post);  
     }
 
@@ -64,6 +66,7 @@ public class FactServlet extends HttpServlet {
         factEntity.setProperty("fact", newPost.getFact());
         factEntity.setProperty("postTime", newPost.getTime());
         factEntity.setProperty("postId", factEntity.getKey().getId());
+        factEntity.setProperty("replies", newPost.getReply());
         DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
         datastore.put(factEntity);
       }
