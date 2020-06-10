@@ -33,12 +33,24 @@
   padding-right: 25px;
   font-size: 16px;
   font-weight: bold;
+  cursor: pointer;
 }
 
 #purpose {
   font-size: 14px;
   margin-top: -10px;
   margin-bottom: 20px;
+}
+
+#delete_button {
+  cursor: pointer;
+  padding: 8px;
+  margin-bottom: 35px;
+}
+
+#refresh_prompt {
+  display: inline;
+  font-size: 14px;
 }
 
 #fact_form {
@@ -56,8 +68,9 @@
   padding: 5px;
 }
 
-.button_spacing {
+.reply_button {
   margin-left: 20px;
+  cursor: pointer;
 }
 
 .hide {
