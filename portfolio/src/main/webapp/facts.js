@@ -27,15 +27,15 @@ function createFactNode(post) {
   replyButton.classList.add("button_spacing");
   singlePostDiv.appendChild(replyButton);
   document.getElementById('new_facts_container').appendChild(singlePostDiv); 
-  replyButton.addEventListener("click", () => promptReplyNode(singlePostDiv, replyButton));  
+  replyButton.addEventListener("click", () => promptReplyNode(singlePostDiv, replyButton, post.postId));  
 }
 
-function promptReplyNode(singlePostDiv, button) {
-  // console.log("PostId: " + postId);
+function promptReplyNode(singlePostDiv, button, postId) {
+  console.log("PostId: " + postId);
   button.classList.add("hide");
   const replyForm = document.createElement('form');
   replyForm.method = 'POST';
-  // replyForm.body = postId; 
+  replyForm.body = postId; 
   replyForm.action = '/reply';
 
   const replyInput = document.createElement('textarea');
@@ -52,10 +52,10 @@ function promptReplyNode(singlePostDiv, button) {
   //     replies.forEach((reply) => createReplyNode(reply, postDiv));
   //   });
   // )
-  submitReplyButton.addEventListener("click", (event) => submitReply(event, replyInput, replyForm));
+  submitReplyButton.addEventListener("click", (event) => submitReply(event, replyInput, replyForm, postId, singlePostDiv));
 }
 
-function submitReply(event, replyInput, form) {
+function submitReply(event, replyInput, form, postId, singlePostDiv) {
   event.preventDefault();
 
   const replyObject = new URLSearchParams();
@@ -67,17 +67,17 @@ function submitReply(event, replyInput, form) {
     headers: {"Content-Type": 'application/x-www-form-urlencoded'}
   });
 
-  // fetch(postRequest).then(response => response.json()).then((replies) => {
-  //   console.log("HERE!")
-  //   // replies.forEach((reply) => createReplyNode(reply));
-  // });
-  fetch(postRequest).then(response => console.log("RESPONSE JSON:" ,response));
+  fetch(postRequest).then(response => response.json()).then((data) => {
+    console.log("HERE!", data);
+    // replies.forEach((reply) => createReplyNode(reply, singlePostDiv));
+  });
+  // fetch(postRequest).then(response => console.log("RESPONSE JSON:" ,response));
   // fetch(postRequest).then(response => console.log(response.formData()).then((data) => {
   //       console.log(data);
   //   }));
 }
 
-// function createReplyNode(reply, siblgePostDiv) {
+// function createReplyNode(reply, sinlgePostDiv) {
 //   const singleReplyDiv = document.createElement('div');
 //   singleReplyDiv.innerText = reply;
 //   singlePostDiv.append(singleReplyDiv);

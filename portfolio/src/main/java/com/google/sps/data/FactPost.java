@@ -25,12 +25,12 @@ public class FactPost {
     replies = new ArrayList<>();
   }
 
-  public FactPost(String name, String message, long id, String time, ArrayList<Reply> userReply) {
+  public FactPost(String name, String message, long id, String time) {
     username = name;
     fact = message;
     postId = id;
     postTime = time;
-    replies = userReply;
+    replies = new ArrayList<>();
   }
 
   public String getFact (){
@@ -52,4 +52,9 @@ public class FactPost {
   public ArrayList<Reply> getReplies(){
     return replies;
   }
+
+  public void additionalReply(Reply newReply){
+    replies.add(newReply);
+  }
+  
 }

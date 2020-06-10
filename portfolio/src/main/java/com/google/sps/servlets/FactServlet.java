@@ -1,8 +1,12 @@
 package com.google.sps.servlets;
 
 import static com.google.sps.servlets.DataStoreKeys.FACT_ENTITY;
+import static com.google.sps.servlets.DataStoreKeys.REPLIES_ENTITY;
 import com.google.sps.data.FactPost;
 import com.google.sps.data.Reply;
+import com.google.appengine.api.datastore.Query.Filter;
+import com.google.appengine.api.datastore.Query.FilterOperator;
+import com.google.appengine.api.datastore.Query.FilterPredicate;
 import com.google.appengine.api.users.UserService;
 import com.google.appengine.api.users.UserServiceFactory;
 import com.google.appengine.api.datastore.DatastoreService;
@@ -38,9 +42,23 @@ public class FactServlet extends HttpServlet {
       String username = (String) factEntity.getProperty("username");
       String fact = (String) factEntity.getProperty("fact");
       String postTime = (String) factEntity.getProperty("postTime");
-      ArrayList<Reply> replies = (ArrayList) factEntity.getProperty("replies");
 
-      FactPost post = new FactPost(username, fact, postId, postTime, replies);
+      FactPost post = new FactPost(username, fact, postId, postTime);
+
+      Filter keyFilter = new FilterPredicate("postId", FilterOperator.EQUAL, postId);
+      Query replyQuery = new Query(REPLIES_ENTITY).setFilter(keyFilter);
+      replyQuery.addSort("replyTime", SortDirection.DESCENDING);
+      PreparedQuery preparedReplyQuery = datastore.prepare(replyQuery); 
+ 
+      for (Entity replyEntity : preparedReplyQuery.asIterable()) {
+        String replyUsername = (String) replyEntity.getProperty("username");
+        String replyData = (String) replyEntity.getProperty("replyData");
+        String replyTime = (String) replyEntity.getProperty("replyTime");
+
+        Reply reply = new Reply(replyUsername, replyData, replyTime);
+
+        post.additionalReply(reply);
+      }
       posts.add(post);  
     }
 
