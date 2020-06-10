@@ -27,9 +27,6 @@ public class FactServlet extends HttpServlet {
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
 
-    //see if I need this
-    UserService userService = UserServiceFactory.getUserService();
-
     Query factQuery = new Query(FACT_ENTITY).addSort("postTime", SortDirection.DESCENDING);
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
     PreparedQuery preparedFactQuery = datastore.prepare(factQuery);
@@ -54,23 +51,28 @@ public class FactServlet extends HttpServlet {
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
 
     UserService userService = UserServiceFactory.getUserService();
-    String username = userService.getCurrentUser().getEmail();
-    String fact = request.getParameter("text-input");
 
-    FactPost newPost = new FactPost(username, fact);
+    if (userService.isUserLoggedIn()){
+      String username = userService.getCurrentUser().getEmail();
+      String fact = request.getParameter("text-input");
+
+      FactPost newPost = new FactPost(username, fact);
       
-    Entity factEntity = new Entity(FACT_ENTITY);
-    if (fact != "") {
-      factEntity.setProperty("username", newPost.getUsername());
-      factEntity.setProperty("fact", newPost.getFact());
-      factEntity.setProperty("postTime", newPost.getTime());
-      factEntity.setProperty("postId", factEntity.getKey().getId());
-      DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
-      datastore.put(factEntity);
+      Entity factEntity = new Entity(FACT_ENTITY);
+      if (fact != "") {
+        factEntity.setProperty("username", newPost.getUsername());
+        factEntity.setProperty("fact", newPost.getFact());
+        factEntity.setProperty("postTime", newPost.getTime());
+        factEntity.setProperty("postId", factEntity.getKey().getId());
+        DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+        datastore.put(factEntity);
+      }
+      response.sendRedirect("/facts.html");
     }
-      
-    response.sendRedirect("/facts.html");
+    else {
+      response.sendRedirect("/index.html");
+    }
   }
-}
+} 
 
  
