@@ -13,7 +13,6 @@ function addRandomFact() {
 
 function getPost() {
   document.getElementById('new_facts_container').innerHTML = "";
-  // fetch('/login').then(response => console.log(response));
   fetch('/share-fact').then(response => response.json()).then((posts) => {
     posts.forEach((post) => createFactNode(post));
   });

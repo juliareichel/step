@@ -1,5 +1,8 @@
 package com.google.sps.data;
 import java.util.ArrayList;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.TimeZone;
 
 /* Class representing a user's "post" (fun fact)*/
 public class FactPost {
@@ -11,7 +14,12 @@ public class FactPost {
   public FactPost(String name, String message) {
     username = name;
     fact = message;
-    postTime = String.valueOf(System.currentTimeMillis());
+    long currentTime = System.currentTimeMillis();
+    Date date = new Date(currentTime);
+    TimeZone timezone = TimeZone.getTimeZone("EST");
+    SimpleDateFormat simpleDate = new SimpleDateFormat("yyyy-MM-dd 'at' HH:mm:ss");
+    simpleDate.setTimeZone(timezone);
+    postTime = simpleDate.format(date);
   }
 
   public FactPost(String name, String message, long id, String time) {
