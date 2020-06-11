@@ -9,21 +9,21 @@ public class Reply {
   private String postTime;
   private String username;
 
-  public Reply(String name, String message) {
-    username = name;
-    reply = message;
+  public Reply(String username, String reply) {
+    this.username = username;
+    this.reply = reply;
     long currentTime = System.currentTimeMillis();
     Date date = new Date(currentTime);
     TimeZone timezone = TimeZone.getTimeZone("EST");
     SimpleDateFormat simpleDate = new SimpleDateFormat("yyyy-MM-dd 'at' HH:mm:ss");
     simpleDate.setTimeZone(timezone);
-    postTime = simpleDate.format(date);
+    this.postTime = simpleDate.format(date);
   }
 
-  public Reply(String name, String message, String time) {
-    username = name;
-    reply = message;
-    postTime = time;
+  public Reply(String username, String reply, String postTime) {
+    this.username = username;
+    this.reply = reply;
+    this.postTime = postTime;
   }
 
   public String getReply (){

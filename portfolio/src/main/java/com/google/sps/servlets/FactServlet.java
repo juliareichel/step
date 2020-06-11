@@ -12,6 +12,9 @@ import com.google.appengine.api.datastore.Entity;
 import com.google.appengine.api.datastore.PreparedQuery;
 import com.google.appengine.api.datastore.Query;
 import com.google.appengine.api.datastore.Query.SortDirection;
+import com.google.appengine.api.datastore.Query.Filter;
+import com.google.appengine.api.datastore.Query.FilterOperator;
+import com.google.appengine.api.datastore.Query.FilterPredicate;
 import com.google.appengine.api.datastore.FetchOptions;
 import com.google.appengine.api.datastore.Key;
 import java.io.IOException;
@@ -43,7 +46,8 @@ public class FactServlet extends HttpServlet {
 
       FactPost post = new FactPost(username, fact, postId, postTime);
 
-      Query replyQuery = new Query(REPLIES_ENTITY);
+      Filter idFilter = new FilterPredicate("parentId", FilterOperator.EQUAL, postId);
+      Query replyQuery = new Query(REPLIES_ENTITY).setFilter(idFilter);
       replyQuery.addSort("replyTime", SortDirection.DESCENDING);
       PreparedQuery preparedReplyQuery = datastore.prepare(replyQuery); 
  
@@ -56,7 +60,7 @@ public class FactServlet extends HttpServlet {
         Reply reply = new Reply(replyUsername, replyData, replyTime);
 
         if (postId == parentId) {
-          post.additionalReply(reply);
+          post.addReply(reply);
         }
       }
       posts.add(post);  

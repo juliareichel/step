@@ -32,24 +32,30 @@ public class ReplyServlet extends HttpServlet {
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
 
     UserService userService = UserServiceFactory.getUserService();
-    String username = userService.getCurrentUser().getEmail();
-    String replyData = request.getParameter("reply-input");
-    Reply newReply = new Reply(username, replyData);
+    if (userService.isUserLoggedIn()){
+      String username = userService.getCurrentUser().getEmail();
+      String replyData = request.getParameter("reply-input");
+      Reply newReply = new Reply(username, replyData);
 
-    String id = request.getParameter("postId");
-    long numericalId = Long.parseLong(id);
+      String id = request.getParameter("postId");
+      long numericalId = Long.parseLong(id);
  
-    DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
-    Entity replyEntity = new Entity(REPLIES_ENTITY);
+      Entity replyEntity = new Entity(REPLIES_ENTITY);
     
-    replyEntity.setProperty("username", newReply.getUsername());
-    replyEntity.setProperty("replyData", newReply.getReply());
-    replyEntity.setProperty("replyTime", newReply.getTime());
-    replyEntity.setProperty("parentId", numericalId);
-    datastore.put(replyEntity);
+      replyEntity.setProperty("username", newReply.getUsername());
+      replyEntity.setProperty("replyData", newReply.getReply());
+      replyEntity.setProperty("replyTime", newReply.getTime());
+      replyEntity.setProperty("parentId", numericalId);
+
+      DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+      datastore.put(replyEntity);
  
-    response.setContentType("application/json;");
-    response.sendRedirect("/facts.html");
+      response.setContentType("application/json;");
+      response.sendRedirect("/facts.html");
+    }
+    else {
+      response.sendRedirect("/index.html");
+    }
   }
 }
  

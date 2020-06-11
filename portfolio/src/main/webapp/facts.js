@@ -40,7 +40,6 @@ function promptReplyNode(singlePostDiv, button, postId) {
   const replyInput = document.createElement('textarea');
   replyInput.name = "reply-input";
   replyForm.appendChild(replyInput);
-  const replyData = replyInput.value; 
 
   var input = document.createElement('input');
     input.type = 'hidden';

@@ -13,24 +13,24 @@ public class FactPost {
   private String username;
   private ArrayList<Reply> replies;
 
-  public FactPost(String name, String message) {
-    username = name;
-    fact = message;
+  public FactPost(String username, String fact) {
+    this.username = username;
+    this.fact = fact;
     long currentTime = System.currentTimeMillis();
     Date date = new Date(currentTime);
     TimeZone timezone = TimeZone.getTimeZone("EST");
     SimpleDateFormat simpleDate = new SimpleDateFormat("yyyy-MM-dd 'at' HH:mm:ss");
     simpleDate.setTimeZone(timezone);
-    postTime = simpleDate.format(date);
-    replies = new ArrayList<>();
+    this.postTime = simpleDate.format(date);
+    this.replies = new ArrayList<>();
   }
 
-  public FactPost(String name, String message, long id, String time) {
-    username = name;
-    fact = message;
-    postId = id;
-    postTime = time;
-    replies = new ArrayList<>();
+  public FactPost(String username, String fact, long postId, String postTime) {
+    this.username = username;
+    this.fact = fact;
+    this.postId = postId;
+    this.postTime = postTime;
+    this.replies = new ArrayList<>();
   }
 
   public String getFact (){
@@ -53,7 +53,7 @@ public class FactPost {
     return replies;
   }
 
-  public void additionalReply(Reply newReply){
+  public void addReply(Reply newReply){
     replies.add(newReply);
   }
   
