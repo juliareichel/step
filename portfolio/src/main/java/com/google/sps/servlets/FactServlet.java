@@ -1,7 +1,9 @@
 package com.google.sps.servlets;
 
 import static com.google.sps.servlets.DataStoreKeys.FACT_ENTITY;
+import static com.google.sps.servlets.DataStoreKeys.REPLIES_ENTITY;
 import com.google.sps.data.FactPost;
+import com.google.sps.data.Reply;
 import com.google.appengine.api.users.UserService;
 import com.google.appengine.api.users.UserServiceFactory;
 import com.google.appengine.api.datastore.DatastoreService;
@@ -10,11 +12,15 @@ import com.google.appengine.api.datastore.Entity;
 import com.google.appengine.api.datastore.PreparedQuery;
 import com.google.appengine.api.datastore.Query;
 import com.google.appengine.api.datastore.Query.SortDirection;
+import com.google.appengine.api.datastore.Query.Filter;
+import com.google.appengine.api.datastore.Query.FilterOperator;
+import com.google.appengine.api.datastore.Query.FilterPredicate;
 import com.google.appengine.api.datastore.FetchOptions;
 import com.google.appengine.api.datastore.Key;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.lang.Long; 
 import com.google.gson.Gson;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -39,6 +45,22 @@ public class FactServlet extends HttpServlet {
       String postTime = (String) factEntity.getProperty("postTime");
 
       FactPost post = new FactPost(username, fact, postId, postTime);
+
+      Filter idFilter = new FilterPredicate("parentId", FilterOperator.EQUAL, postId);
+      Query replyQuery = new Query(REPLIES_ENTITY).setFilter(idFilter);
+      replyQuery.addSort("replyTime", SortDirection.DESCENDING);
+      PreparedQuery preparedReplyQuery = datastore.prepare(replyQuery); 
+ 
+      for (Entity replyEntity : preparedReplyQuery.asIterable()) {
+        String replyUsername = (String) replyEntity.getProperty("username");
+        String replyData = (String) replyEntity.getProperty("replyData");
+        String replyTime = (String) replyEntity.getProperty("replyTime");
+        Long parentId = (Long) replyEntity.getProperty("parentId");
+
+        Reply reply = new Reply(replyUsername, replyData, replyTime);
+
+        post.addReply(reply);
+      }
       posts.add(post);  
     }
 

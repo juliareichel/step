@@ -27,6 +27,42 @@ function createFactNode(post) {
   replyButton.classList.add("reply_button");
   singlePostDiv.appendChild(replyButton);
   document.getElementById('new_facts_container').appendChild(singlePostDiv); 
+
+  const replyDiv = createReplyNode(post.replies, singlePostDiv);
+  replyButton.addEventListener("click", () => promptReplyNode(singlePostDiv, replyButton, post.postId));  
+}
+
+function promptReplyNode(singlePostDiv, button, postId) {
+  button.classList.add("hide");
+  const replyForm = document.createElement('form');
+  replyForm.method = 'POST';
+  replyForm.action = '/reply';
+
+  const replyInput = document.createElement('textarea');
+  replyInput.name = "reply-input";
+  replyForm.appendChild(replyInput);
+
+  var input = document.createElement('input');
+    input.type = 'hidden';
+    input.name = "postId"; 
+    input.value = postId;
+  replyForm.appendChild(input);
+  
+  const submitReplyButton = document.createElement('button');
+  submitReplyButton.type = "submit";
+  submitReplyButton.innerText = "Reply";
+  replyForm.appendChild(submitReplyButton);
+  submitReplyButton.classList.add("button_spacing");
+  singlePostDiv.appendChild(replyForm);
+}
+
+function createReplyNode(replies, singlePostDiv) {
+  replies.forEach((reply) => {
+    const singleReplyDiv = document.createElement('div');
+    singleReplyDiv.classList.add("reply_text");
+    singleReplyDiv.innerText = (reply.username + ": " + reply.reply + "\n" + reply.postTime);
+    singlePostDiv.append(singleReplyDiv);
+  });
 }
 
 function deleteFacts() {

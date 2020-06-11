@@ -68,6 +68,15 @@
   padding: 5px;
 }
 
+.reply_text {
+  font-size: 12px;
+  margin-top: 10px;
+}
+
+.button_spacing {
+  margin-left: 20px;
+  margin-top: 7px;
+
 .reply_button {
   margin-left: 20px;
   cursor: pointer;
