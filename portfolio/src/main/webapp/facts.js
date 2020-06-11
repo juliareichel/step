@@ -28,30 +28,23 @@ function createFactNode(post) {
   singlePostDiv.appendChild(replyButton);
   document.getElementById('new_facts_container').appendChild(singlePostDiv); 
   const replyDiv = createReplyNode(post.replies, singlePostDiv);
-  // singlePostDiv.append(replyDiv);
   replyButton.addEventListener("click", () => promptReplyNode(singlePostDiv, replyButton, post.postId));  
 }
 
 function promptReplyNode(singlePostDiv, button, postId) {
-  console.log("PostId: " + postId);
   button.classList.add("hide");
   const replyForm = document.createElement('form');
   replyForm.method = 'POST';
-  
   replyForm.action = '/reply';
-  // const replyObject = new URLSearchParams();
-  // replyObject.append("postId", postId);
 
   const replyInput = document.createElement('textarea');
   replyInput.name = "reply-input";
   replyForm.appendChild(replyInput);
   const replyData = replyInput.value; 
-  // replyObject.append("reply-input", replyData);
-  // replyForm.body = replyObject; 
 
   var input = document.createElement('input');
     input.type = 'hidden';
-    input.name = "postId"; // 'the key/name of the attribute/field that is sent to the server
+    input.name = "postId"; 
     input.value = postId;
   replyForm.appendChild(input);
   
@@ -65,20 +58,9 @@ function promptReplyNode(singlePostDiv, button, postId) {
 
 function createReplyNode(replies, singlePostDiv) {
   replies.forEach((reply) => {
-    console.log(reply);
-    console.log(reply.username);
     const singleReplyDiv = document.createElement('div');
     singleReplyDiv.classList.add("reply_text");
     singleReplyDiv.innerText = (reply.username + ": " + reply.reply + "\n" + reply.postTime);
     singlePostDiv.append(singleReplyDiv);
   });
-  // const singleReplyDiv = document.createElement('div');
-
-  // for (var i = 0; i < post.length; i++) {
-  //   console.log(post[i]);
-  //   console.log(post[i].replies);
-  // }
-  // singleReplyDiv.innerText = post;
-
-  // return singleReplyDiv;
 }

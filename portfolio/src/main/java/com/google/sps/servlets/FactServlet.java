@@ -4,9 +4,6 @@ import static com.google.sps.servlets.DataStoreKeys.FACT_ENTITY;
 import static com.google.sps.servlets.DataStoreKeys.REPLIES_ENTITY;
 import com.google.sps.data.FactPost;
 import com.google.sps.data.Reply;
-import com.google.appengine.api.datastore.Query.Filter;
-import com.google.appengine.api.datastore.Query.FilterOperator;
-import com.google.appengine.api.datastore.Query.FilterPredicate;
 import com.google.appengine.api.users.UserService;
 import com.google.appengine.api.users.UserServiceFactory;
 import com.google.appengine.api.datastore.DatastoreService;
@@ -17,11 +14,10 @@ import com.google.appengine.api.datastore.Query;
 import com.google.appengine.api.datastore.Query.SortDirection;
 import com.google.appengine.api.datastore.FetchOptions;
 import com.google.appengine.api.datastore.Key;
-import com.google.appengine.api.datastore.KeyFactory;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.io.*;
+import java.lang.Long; 
 import com.google.gson.Gson;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -47,15 +43,7 @@ public class FactServlet extends HttpServlet {
 
       FactPost post = new FactPost(username, fact, postId, postTime);
 
-      System.out.println("****factEntity id**** " + postId);
-      Key lastKey = KeyFactory.createKey(FACT_ENTITY, postId);
-      System.out.println("****factEntity KEY***" + lastKey);
-      String propertyName = factEntity.KEY_RESERVED_PROPERTY;
-      System.out.println("***propertyName***" + propertyName);
-      Filter keyFilter = new FilterPredicate(propertyName, FilterOperator.EQUAL, lastKey);
-      System.out.println("***keyFilter**" + keyFilter);
       Query replyQuery = new Query(REPLIES_ENTITY);
-      // .setFilter(keyFilter);
       replyQuery.addSort("replyTime", SortDirection.DESCENDING);
       PreparedQuery preparedReplyQuery = datastore.prepare(replyQuery); 
  
@@ -63,12 +51,11 @@ public class FactServlet extends HttpServlet {
         String replyUsername = (String) replyEntity.getProperty("username");
         String replyData = (String) replyEntity.getProperty("replyData");
         String replyTime = (String) replyEntity.getProperty("replyTime");
-        long replyId = replyEntity.getKey().getId();
-        // System.out.println("REPLY ID ********" + replyEntity.getProperty("replyId"));
+        Long parentId = (Long) replyEntity.getProperty("parentId");
 
         Reply reply = new Reply(replyUsername, replyData, replyTime);
 
-        if (postId == replyId) {
+        if (postId == parentId) {
           post.additionalReply(reply);
         }
       }

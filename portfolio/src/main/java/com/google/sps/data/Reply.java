@@ -6,7 +6,6 @@ import java.util.TimeZone;
 /* Class representing a user's "reply"*/
 public class Reply {
   private String reply;
-  // private long factId; 
   private String postTime;
   private String username;
 
@@ -30,10 +29,6 @@ public class Reply {
   public String getReply (){
     return reply;
   }
-
-  // public long getId() {
-  //   return factId;
-  // }
 
   public String getTime() {
     return postTime;

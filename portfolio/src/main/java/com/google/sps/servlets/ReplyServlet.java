@@ -33,7 +33,6 @@ public class ReplyServlet extends HttpServlet {
 
     UserService userService = UserServiceFactory.getUserService();
     String username = userService.getCurrentUser().getEmail();
-
     String replyData = request.getParameter("reply-input");
     Reply newReply = new Reply(username, replyData);
 
@@ -41,11 +40,12 @@ public class ReplyServlet extends HttpServlet {
     long numericalId = Long.parseLong(id);
  
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
-    Entity replyEntity = new Entity(REPLIES_ENTITY, numericalId);
+    Entity replyEntity = new Entity(REPLIES_ENTITY);
+    
     replyEntity.setProperty("username", newReply.getUsername());
     replyEntity.setProperty("replyData", newReply.getReply());
     replyEntity.setProperty("replyTime", newReply.getTime());
- 
+    replyEntity.setProperty("parentId", numericalId);
     datastore.put(replyEntity);
  
     response.setContentType("application/json;");
