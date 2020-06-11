@@ -59,9 +59,7 @@ public class FactServlet extends HttpServlet {
 
         Reply reply = new Reply(replyUsername, replyData, replyTime);
 
-        if (postId == parentId) {
-          post.addReply(reply);
-        }
+        post.addReply(reply);
       }
       posts.add(post);  
     }
