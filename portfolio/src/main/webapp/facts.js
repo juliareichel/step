@@ -24,9 +24,10 @@ function createFactNode(post) {
   singlePostDiv.innerText = (post.username + ": " + post.fact + "\n" + post.postTime);
   const replyButton = document.createElement('button');
   replyButton.innerText = "Reply to this Person";
-  replyButton.classList.add("button_spacing");
+  replyButton.classList.add("reply_button");
   singlePostDiv.appendChild(replyButton);
   document.getElementById('new_facts_container').appendChild(singlePostDiv); 
+
   const replyDiv = createReplyNode(post.replies, singlePostDiv);
   replyButton.addEventListener("click", () => promptReplyNode(singlePostDiv, replyButton, post.postId));  
 }
@@ -62,4 +63,9 @@ function createReplyNode(replies, singlePostDiv) {
     singleReplyDiv.innerText = (reply.username + ": " + reply.reply + "\n" + reply.postTime);
     singlePostDiv.append(singleReplyDiv);
   });
+}
+
+function deleteFacts() {
+  const request = new Request('/delete-post', {method: 'POST'});
+  fetch(request).then(response => getPost());
 }
