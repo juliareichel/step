@@ -17,6 +17,7 @@ import com.google.appengine.api.datastore.Query;
 import com.google.appengine.api.datastore.Query.SortDirection;
 import com.google.appengine.api.datastore.FetchOptions;
 import com.google.appengine.api.datastore.Key;
+import com.google.appengine.api.datastore.KeyFactory;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -46,7 +47,13 @@ public class FactServlet extends HttpServlet {
 
       FactPost post = new FactPost(username, fact, postId, postTime);
 
-      // Filter keyFilter = new FilterPredicate("postId", FilterOperator.EQUAL, postId);
+      System.out.println("****factEntity id**** " + postId);
+      Key lastKey = KeyFactory.createKey(FACT_ENTITY, postId);
+      System.out.println("****factEntity KEY***" + lastKey);
+      String propertyName = factEntity.KEY_RESERVED_PROPERTY;
+      System.out.println("***propertyName***" + propertyName);
+      Filter keyFilter = new FilterPredicate(propertyName, FilterOperator.EQUAL, lastKey);
+      System.out.println("***keyFilter**" + keyFilter);
       Query replyQuery = new Query(REPLIES_ENTITY);
       // .setFilter(keyFilter);
       replyQuery.addSort("replyTime", SortDirection.DESCENDING);
@@ -56,11 +63,14 @@ public class FactServlet extends HttpServlet {
         String replyUsername = (String) replyEntity.getProperty("username");
         String replyData = (String) replyEntity.getProperty("replyData");
         String replyTime = (String) replyEntity.getProperty("replyTime");
+        long replyId = replyEntity.getKey().getId();
+        // System.out.println("REPLY ID ********" + replyEntity.getProperty("replyId"));
 
         Reply reply = new Reply(replyUsername, replyData, replyTime);
-        System.out.println("**********REPLY HERE*************" + reply);
 
-        post.additionalReply(reply);
+        if (postId == replyId) {
+          post.additionalReply(reply);
+        }
       }
       posts.add(post);  
     }
@@ -87,7 +97,6 @@ public class FactServlet extends HttpServlet {
         factEntity.setProperty("fact", newPost.getFact());
         factEntity.setProperty("postTime", newPost.getTime());
         factEntity.setProperty("postId", factEntity.getKey().getId());
-        // factEntity.setProperty("replies", newPost.getReply());
         DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
         datastore.put(factEntity);
       }
