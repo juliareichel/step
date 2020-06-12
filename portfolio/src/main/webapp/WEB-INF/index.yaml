@@ -1,0 +1,6 @@
+indexes:
+- kind: Reply
+  properties:
+  - name: parentId
+  - name: replyTime
+    direction: desc
