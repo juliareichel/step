@@ -76,10 +76,13 @@
 .button_spacing {
   margin-left: 20px;
   margin-top: 7px;
+}
 
 .reply_button {
-  margin-left: 20px;
   cursor: pointer;
+  margin-left: 10px;
+  margin-top: 10px;
+  margin-bottom: 10px;
 }
 
 .hide {
