@@ -30,19 +30,20 @@ public final class FindMeetingQuery {
 
     ArrayList<TimeRange> possibleTimes = new ArrayList<>();
 
-    /*When the requested duration is longer than 24 hours*/
+    /* When the requested duration is longer than 24 hours */
     long duration = request.getDuration();
     if (duration > 1440){
       return Collections.emptyList();
     }
     
-    /*If there are no scheduled events yet*/
+    /* If there are no scheduled events yet */
     if (events.isEmpty()){
       return Arrays.asList(TimeRange.WHOLE_DAY);
     }
 
-    /*If there is only one person in request*/
+    /*If there is only one person requesting meeting*/
     Collection<String> requestAttendees = request.getAttendees();
+
     if (requestAttendees.size() == 1){
        ArrayList<Event> tempList = new ArrayList<>(events);
         for (int i=0; i<tempList.size()-1; i++){
@@ -58,7 +59,7 @@ public final class FindMeetingQuery {
       }
     }
 
-    /*Ignores people not attending the existing event*/
+    /* Ignores people not attending the existing event */
     Iterator<Event> iter = events.iterator();
 
     for (String requestAttendee: requestAttendees) {
@@ -71,7 +72,7 @@ public final class FindMeetingQuery {
     }
 
 
-    /*Event splits the rest of the day into two parts*/
+    /* Event splits the rest of the day into two parts */
     Iterator<Event> iter2 = events.iterator();
 
     if (events.size() == 1){
@@ -91,16 +92,16 @@ public final class FindMeetingQuery {
       return possibleTimes;
     }
 
-     else if (events.size() == 2){
-       ArrayList<Event> tempListTwo = new ArrayList<>(events);
-       int earliestStart, latestEnd;
-       for (int i=0; i<tempListTwo.size()-1; i++){
-         TimeRange firstEventTime = tempListTwo.get(i).getWhen();
-         Set<String> firstEventAttendees = tempListTwo.get(i).getAttendees();
-         TimeRange secondEventTime = tempListTwo.get(i+1).getWhen();
-         Set<String> secondEventAttendees = tempListTwo.get(i+1).getAttendees();
+    else if (events.size() == 2){
+      ArrayList<Event> tempListTwo = new ArrayList<>(events);
+      int earliestStart, latestEnd;
+      for (int i=0; i<tempListTwo.size()-1; i++){
+        TimeRange firstEventTime = tempListTwo.get(i).getWhen();
+        Set<String> firstEventAttendees = tempListTwo.get(i).getAttendees();
+        TimeRange secondEventTime = tempListTwo.get(i+1).getWhen();
+        Set<String> secondEventAttendees = tempListTwo.get(i+1).getAttendees();
 
-        /* Checks for overlapping events  */
+        /* Checks for overlapping events */
         if (firstEventTime.overlaps(secondEventTime)){
           earliestStart = firstEventTime.start();
           latestEnd = firstEventTime.end();
@@ -136,7 +137,7 @@ public final class FindMeetingQuery {
         }
         break;
        }
-     }
-      return possibleTimes;
     }
+    return possibleTimes;
   }
+}
