@@ -89,7 +89,7 @@ public final class FindMeetingQuery {
       return possibleTimes;
     }
 
-    else if (events.size() == 2){
+    else {
       ArrayList<Event> tempListTwo = new ArrayList<>(events);
       int earliestStart, latestEnd;
       for (int i=0; i<tempListTwo.size()-1; i++){
