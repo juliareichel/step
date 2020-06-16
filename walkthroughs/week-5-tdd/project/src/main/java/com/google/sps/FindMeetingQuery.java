@@ -14,9 +14,6 @@
 
 package com.google.sps;
 
-import com.google.sps.TimeRange;
-import static com.google.sps.TimeRange.START_OF_DAY;
-import static com.google.sps.TimeRange.END_OF_DAY;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.ArrayList;
@@ -32,7 +29,7 @@ public final class FindMeetingQuery {
 
     /* When the requested duration is longer than 24 hours */
     long duration = request.getDuration();
-    if (duration > 1440){
+    if (duration > TimeRange.WHOLE_DAY.duration()){
       return Collections.emptyList();
     }
     

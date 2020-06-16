@@ -19,7 +19,6 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
-import java.util.Iterator;
 
 public final class MeetingRequest {
   // All the people that should be attending this new meeting. Use a set to avoid duplicates.
