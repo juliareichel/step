@@ -24,7 +24,6 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.Iterator;
-import java.io.*;
 
 public final class FindMeetingQuery {
   public Collection<TimeRange> query(Collection<Event> events, MeetingRequest request) {
@@ -34,7 +33,6 @@ public final class FindMeetingQuery {
     /*When the requested duration is longer than 24 hours*/
     long duration = request.getDuration();
     if (duration > 1440){
-      System.out.println("DURATION IS LONGER THAN DAY!");
       return Collections.emptyList();
     }
     
@@ -47,13 +45,12 @@ public final class FindMeetingQuery {
     Collection<String> requestAttendees = request.getAttendees();
     if (requestAttendees.size() == 1){
        ArrayList<Event> tempList = new ArrayList<>(events);
-        for (int i=0; i<tempList.size(); i++){
+        for (int i=0; i<tempList.size()-1; i++){
          TimeRange firstEventTime = tempList.get(i).getWhen();
-         i++;
-         TimeRange secondEventTime = tempList.get(i).getWhen();
+         TimeRange secondEventTime = tempList.get(i+1).getWhen();
          int timeInterval = secondEventTime.start() - firstEventTime.end();
          if (timeInterval == duration){
-           TimeRange availableSlot = TimeRange.fromStartEnd(firstEventTime.end(), secondEventTime.start(), false);
+          TimeRange availableSlot = TimeRange.fromStartEnd(firstEventTime.end(), secondEventTime.start(), false);
           possibleTimes.add(availableSlot);
           return possibleTimes;
          }
@@ -79,10 +76,8 @@ public final class FindMeetingQuery {
 
     if (events.size() == 1){
       TimeRange eventTime = iter2.next().getWhen();
-      System.out.println("EventTime: " + eventTime);
       int startTime = eventTime.start();
       int endTime = eventTime.end();
-      System.out.println("Time of splitting event: " + eventTime);
       if (startTime != TimeRange.START_OF_DAY){
         TimeRange firstHalf = TimeRange.fromStartEnd(TimeRange.START_OF_DAY, startTime, false);
         TimeRange secondHalf = TimeRange.fromStartEnd(endTime, TimeRange.END_OF_DAY, true);
@@ -96,18 +91,14 @@ public final class FindMeetingQuery {
       return possibleTimes;
     }
 
-    /* *********************************************** */
-
-
      else if (events.size() == 2){
        ArrayList<Event> tempListTwo = new ArrayList<>(events);
        int earliestStart, latestEnd;
-       for (int i=0; i<tempListTwo.size(); i++){
+       for (int i=0; i<tempListTwo.size()-1; i++){
          TimeRange firstEventTime = tempListTwo.get(i).getWhen();
          Set<String> firstEventAttendees = tempListTwo.get(i).getAttendees();
-         i++;
-         TimeRange secondEventTime = tempListTwo.get(i).getWhen();
-         Set<String> secondEventAttendees = tempListTwo.get(i).getAttendees();
+         TimeRange secondEventTime = tempListTwo.get(i+1).getWhen();
+         Set<String> secondEventAttendees = tempListTwo.get(i+1).getAttendees();
 
         /* Checks for overlapping events  */
         if (firstEventTime.overlaps(secondEventTime)){
@@ -135,7 +126,6 @@ public final class FindMeetingQuery {
 
         /* Case for considering every unique attendee */
         else if (!firstEventTime.overlaps(secondEventTime) && !firstEventTime.contains(secondEventTime) && !firstEventAttendees.equals(secondEventAttendees)){
-            System.out.println("CONSIDERING EVERYONE!!!!!!!!!!!!!!!!!!!!");
             TimeRange firstSection = TimeRange.fromStartEnd(TimeRange.START_OF_DAY, firstEventTime.start(), false);
             TimeRange secondSection = TimeRange.fromStartEnd(firstEventTime.end(), secondEventTime.start(), false);
             TimeRange thirdSection = TimeRange.fromStartEnd(secondEventTime.end(), TimeRange.END_OF_DAY, true);
@@ -147,8 +137,6 @@ public final class FindMeetingQuery {
         break;
        }
      }
-
-      System.out.println("Did not enter any of the loops");
       return possibleTimes;
     }
-}
+  }
