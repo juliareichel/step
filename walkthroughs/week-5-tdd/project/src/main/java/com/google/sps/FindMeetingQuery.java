@@ -18,35 +18,35 @@ public final class FindMeetingQuery {
       return Collections.emptyList();
     }
     
-    Set<String> requestAttendees = new HashSet<String>();
-    requestAttendees.addAll(request.getAttendees());
+    Set<String> requiredAttendees = new HashSet<String>();
+    requiredAttendees.addAll(request.getAttendees());
     if (events.isEmpty()){
       return Arrays.asList(TimeRange.WHOLE_DAY);
     }
 
-    unavailableTimes = findUnavailableSlots(events, requestAttendees, unavailableTimes, request);
+    unavailableTimes = findUnavailableSlots(events, requiredAttendees, unavailableTimes, request);
     possibleTimes = findAvailableSlots(unavailableTimes, duration);
     return possibleTimes;
   }
  
-  public boolean personBusy(Event event, Set<String> requestAttendees){
+  public boolean personBusy(Event event, Set<String> requiredAttendees){
     Set<String> eventAttendees = new HashSet<>(event.getAttendees());
-    eventAttendees.retainAll(requestAttendees);
+    eventAttendees.retainAll(requiredAttendees);
     if(!eventAttendees.isEmpty()){
       return true;
     }
     return false;
   }
  
-  public ArrayList<TimeRange> findUnavailableSlots(Collection<Event> events, Set<String> requestAttendees, ArrayList<TimeRange> unavailableTimes, MeetingRequest request){
+  public ArrayList<TimeRange> findUnavailableSlots(Collection<Event> events, Set<String> requiredAttendees, ArrayList<TimeRange> unavailableTimes, MeetingRequest request){
     
     Set<String> optionalAttendees = new HashSet<>(request.getOptionalAttendees());
-    if (!optionalAttendees.isEmpty() && requestAttendees.isEmpty()){
-      requestAttendees = optionalAttendees;
+    if (!optionalAttendees.isEmpty() && requiredAttendees.isEmpty()){
+      requiredAttendees = optionalAttendees;
     }
 
     for (Event event: events){
-      if(personBusy(event, requestAttendees)){
+      if(personBusy(event, requiredAttendees)){
         unavailableTimes.add(event.getWhen());
       } 
     }
