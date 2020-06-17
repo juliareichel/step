@@ -1,18 +1,4 @@
-// Copyright 2019 Google LLC
-//
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//
-//     https://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
-
-package com.google.sps;
+ package com.google.sps;
 
 import java.util.Collection;
 import java.util.Collections;
@@ -20,121 +6,97 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
-import java.util.Iterator;
-
+ 
 public final class FindMeetingQuery {
+  
   public Collection<TimeRange> query(Collection<Event> events, MeetingRequest request) {
-
     ArrayList<TimeRange> possibleTimes = new ArrayList<>();
-
-    /* When the requested duration is longer than 24 hours */
+    ArrayList<TimeRange> unavailableTimes = new ArrayList<>();
     long duration = request.getDuration();
+ 
     if (duration > TimeRange.WHOLE_DAY.duration()){
       return Collections.emptyList();
     }
     
-    /* If there are no scheduled events yet */
-    if (events.isEmpty()){
+    Set<String> requestAttendees = new HashSet<String>();
+    requestAttendees.addAll(request.getAttendees());
+    if (events.isEmpty() || (requestAttendees.isEmpty())){
       return Arrays.asList(TimeRange.WHOLE_DAY);
     }
 
-    /*If there is only one person requesting meeting*/
-    Collection<String> requestAttendees = request.getAttendees();
-
-    if (requestAttendees.size() == 1){
-       ArrayList<Event> tempList = new ArrayList<>(events);
-        for (int i=0; i<tempList.size()-1; i++){
-         TimeRange firstEventTime = tempList.get(i).getWhen();
-         TimeRange secondEventTime = tempList.get(i+1).getWhen();
-         int timeInterval = secondEventTime.start() - firstEventTime.end();
-         if (timeInterval == duration){
-          TimeRange availableSlot = TimeRange.fromStartEnd(firstEventTime.end(), secondEventTime.start(), false);
-          possibleTimes.add(availableSlot);
-          return possibleTimes;
-         }
-         break;
-      }
-    }
-
-    /* Ignores people not attending the existing event */
-    Iterator<Event> iter = events.iterator();
-
-    for (String requestAttendee: requestAttendees) {
-      Collection<String> EventAttendees = iter.next().getAttendees();
-      for (String EventAttendee: EventAttendees) {
-         if (!requestAttendee.equals(EventAttendee)){
-           return Arrays.asList(TimeRange.WHOLE_DAY);
-         }
-      }
-    }
-
-
-    /* Event splits the rest of the day into two parts */
-    Iterator<Event> iter2 = events.iterator();
-
-    if (events.size() == 1){
-      TimeRange eventTime = iter2.next().getWhen();
-      int startTime = eventTime.start();
-      int endTime = eventTime.end();
-      if (startTime != TimeRange.START_OF_DAY){
-        TimeRange firstHalf = TimeRange.fromStartEnd(TimeRange.START_OF_DAY, startTime, false);
-        TimeRange secondHalf = TimeRange.fromStartEnd(endTime, TimeRange.END_OF_DAY, true);
-        possibleTimes.add(firstHalf);
-        possibleTimes.add(secondHalf);
-      }
-      else {
-        TimeRange firstHalf = TimeRange.fromStartEnd(endTime, TimeRange.END_OF_DAY, true);
-        possibleTimes.add(firstHalf);
-      }
-      return possibleTimes;
-    }
-
-    else {
-      ArrayList<Event> tempListTwo = new ArrayList<>(events);
-      int earliestStart, latestEnd;
-      for (int i=0; i<tempListTwo.size()-1; i++){
-        TimeRange firstEventTime = tempListTwo.get(i).getWhen();
-        Set<String> firstEventAttendees = tempListTwo.get(i).getAttendees();
-        TimeRange secondEventTime = tempListTwo.get(i+1).getWhen();
-        Set<String> secondEventAttendees = tempListTwo.get(i+1).getAttendees();
-
-        /* Checks for overlapping events */
-        if (firstEventTime.overlaps(secondEventTime)){
-          earliestStart = firstEventTime.start();
-          latestEnd = firstEventTime.end();
-          int startTemp = secondEventTime.start();
-          int endTemp = secondEventTime.end();
-            if (startTemp < earliestStart) {
-              earliestStart = startTemp;
-            }
-            if (endTemp > latestEnd) {
-              latestEnd = endTemp;
-            }
-      
-            if (earliestStart != TimeRange.START_OF_DAY){
-              TimeRange firstAvailableSlot = TimeRange.fromStartEnd(TimeRange.START_OF_DAY, earliestStart, false);
-              possibleTimes.add(firstAvailableSlot);
-              if (latestEnd != TimeRange.END_OF_DAY) {
-                TimeRange secondAvailableSlot = TimeRange.fromStartEnd(latestEnd, TimeRange.END_OF_DAY, true);
-                possibleTimes.add(secondAvailableSlot);
-              }      
-            }
-          return possibleTimes;
-        }
-
-        /* Case for considering every unique attendee */
-        else if (!firstEventTime.overlaps(secondEventTime) && !firstEventTime.contains(secondEventTime) && !firstEventAttendees.equals(secondEventAttendees)){
-            TimeRange firstSection = TimeRange.fromStartEnd(TimeRange.START_OF_DAY, firstEventTime.start(), false);
-            TimeRange secondSection = TimeRange.fromStartEnd(firstEventTime.end(), secondEventTime.start(), false);
-            TimeRange thirdSection = TimeRange.fromStartEnd(secondEventTime.end(), TimeRange.END_OF_DAY, true);
-            possibleTimes.add(firstSection);
-            possibleTimes.add(secondSection);
-            possibleTimes.add(thirdSection);
-            return possibleTimes;
-        }
-        break;
-       }
-    }
+    unavailableTimes = findUnavailableSlots(events, requestAttendees, unavailableTimes);
+    possibleTimes = findAvailableSlots(unavailableTimes, duration);
     return possibleTimes;
   }
+ 
+  public boolean personBusy(Event event, Set<String> requestAttendees){
+    Set<String> eventAttendees = new HashSet<>(event.getAttendees());
+    eventAttendees.retainAll(requestAttendees);
+    if(!eventAttendees.isEmpty()){
+      return true;
+    }
+    return false;
+  }
+ 
+ 
+  public ArrayList<TimeRange> findUnavailableSlots(Collection<Event> events, Set<String> requestAttendees, ArrayList<TimeRange> unavailableTimes){
+    for (Event event: events){
+      if(personBusy(event, requestAttendees)){
+        unavailableTimes.add(event.getWhen());
+      } 
+    }
+    Collections.sort(unavailableTimes, TimeRange.ORDER_BY_START);
+    ArrayList<TimeRange> notOverlappingTimes = new ArrayList<>();
+ 
+    for (int i=0; i<unavailableTimes.size(); i++){  
+      if (notOverlappingTimes.isEmpty() || !unavailableTimes.get(i).overlaps(notOverlappingTimes.get(notOverlappingTimes.size()-1))){
+        notOverlappingTimes.add(unavailableTimes.get(i));
+      } else {
+        TimeRange lastNonOverlapping = notOverlappingTimes.get(notOverlappingTimes.size()-1);
+        int start = Math.min(lastNonOverlapping.start(), unavailableTimes.get(i).start());
+        int end = Math.max(lastNonOverlapping.end(), unavailableTimes.get(i).end());
+ 
+        TimeRange allUnavailable = TimeRange.fromStartEnd(start, end, false);
+        notOverlappingTimes.remove(lastNonOverlapping);
+        notOverlappingTimes.add(allUnavailable);
+        }
+    }
+    return notOverlappingTimes;
+  }
+ 
+  public ArrayList<TimeRange> findAvailableSlots(ArrayList<TimeRange> unavailableTimes, long duration){
+    int earliestStart = TimeRange.START_OF_DAY;
+    int latestEnd = TimeRange.END_OF_DAY;
+    ArrayList<TimeRange> availableTimes = new ArrayList<>();
+
+    if (!unavailableTimes.isEmpty()){
+      TimeRange first = unavailableTimes.get(0);
+      TimeRange availableSlot = TimeRange.fromStartEnd(earliestStart, first.start(), false);
+      int timeInterval = availableSlot.duration();
+      if (timeInterval >= duration) {
+        availableTimes.add(availableSlot);
+      }
+    } else{
+      ArrayList<TimeRange> fullDay = new ArrayList<>();
+      fullDay.add(TimeRange.WHOLE_DAY);
+      return fullDay;
+    }
+ 
+    for (int i=0; i<unavailableTimes.size(); i++){
+      TimeRange currEvent = unavailableTimes.get(i);
+      int nextEventStart;
+      if (i==unavailableTimes.size()-1){
+        nextEventStart = latestEnd + 1;
+      } else {
+        nextEventStart = unavailableTimes.get(i+1).start();
+      }
+      int timeIntervalTwo = nextEventStart - currEvent.end();
+      if (timeIntervalTwo >= duration){
+        TimeRange availableSlotTwo = TimeRange.fromStartEnd(currEvent.end(), nextEventStart, false);
+        availableTimes.add(availableSlotTwo);
+      }
+    }
+    return availableTimes;
+  }
 }
+
