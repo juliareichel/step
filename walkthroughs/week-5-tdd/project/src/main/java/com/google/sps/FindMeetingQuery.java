@@ -20,11 +20,11 @@ public final class FindMeetingQuery {
     
     Set<String> requestAttendees = new HashSet<String>();
     requestAttendees.addAll(request.getAttendees());
-    if (events.isEmpty() || (requestAttendees.isEmpty())){
+    if (events.isEmpty()){
       return Arrays.asList(TimeRange.WHOLE_DAY);
     }
 
-    unavailableTimes = findUnavailableSlots(events, requestAttendees, unavailableTimes);
+    unavailableTimes = findUnavailableSlots(events, requestAttendees, unavailableTimes, request);
     possibleTimes = findAvailableSlots(unavailableTimes, duration);
     return possibleTimes;
   }
@@ -38,8 +38,13 @@ public final class FindMeetingQuery {
     return false;
   }
  
- 
-  public ArrayList<TimeRange> findUnavailableSlots(Collection<Event> events, Set<String> requestAttendees, ArrayList<TimeRange> unavailableTimes){
+  public ArrayList<TimeRange> findUnavailableSlots(Collection<Event> events, Set<String> requestAttendees, ArrayList<TimeRange> unavailableTimes, MeetingRequest request){
+    
+    Set<String> optionalAttendees = new HashSet<>(request.getOptionalAttendees());
+    if (!optionalAttendees.isEmpty() && requestAttendees.isEmpty()){
+      requestAttendees = optionalAttendees;
+    }
+
     for (Event event: events){
       if(personBusy(event, requestAttendees)){
         unavailableTimes.add(event.getWhen());
@@ -65,6 +70,7 @@ public final class FindMeetingQuery {
   }
  
   public ArrayList<TimeRange> findAvailableSlots(ArrayList<TimeRange> unavailableTimes, long duration){
+
     int earliestStart = TimeRange.START_OF_DAY;
     int latestEnd = TimeRange.END_OF_DAY;
     ArrayList<TimeRange> availableTimes = new ArrayList<>();
