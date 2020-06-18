@@ -1,4 +1,6 @@
- package com.google.sps;
+/*A query that finds available meeting times given a list of attendees and times*/
+
+package com.google.sps;
 
 import java.util.Collection;
 import java.util.Collections;
@@ -10,56 +12,105 @@ import java.util.Set;
 public final class FindMeetingQuery {
   
   public Collection<TimeRange> query(Collection<Event> events, MeetingRequest request) {
-    ArrayList<TimeRange> possibleTimes = new ArrayList<>();
-    ArrayList<TimeRange> unavailableTimes = new ArrayList<>();
-    long duration = request.getDuration();
- 
-    if (duration > TimeRange.WHOLE_DAY.duration()){
+
+    if (request.getDuration() > TimeRange.WHOLE_DAY.duration()){
       return Collections.emptyList();
     }
     
-    Set<String> requiredAttendees = new HashSet<String>();
-    requiredAttendees.addAll(request.getAttendees());
     if (events.isEmpty()){
       return Arrays.asList(TimeRange.WHOLE_DAY);
     }
 
-    unavailableTimes = findUnavailableSlots(events, requiredAttendees, unavailableTimes, request);
-    possibleTimes = findAvailableSlots(unavailableTimes, duration);
+    ArrayList<TimeRange> possibleTimes = filterUnavailableSlots(events, request);
     return possibleTimes;
   }
+
+  /***
+    *function used to see whether a person is available to meet
+    *retainAll is used to filter the set to keep only the elements contained in 
+     the specified collection 
+    @param event the unique event
+    @param attendees the set of attendees whose availability is being checked
+    @return boolean T/F if person is busy
+  ***/
  
-  public boolean personBusy(Event event, Set<String> requiredAttendees){
+  public boolean isPersonBusy(Event event, Set<String> attendees){
     Set<String> eventAttendees = new HashSet<>(event.getAttendees());
-    eventAttendees.retainAll(requiredAttendees);
+    eventAttendees.retainAll(attendees);
     if(!eventAttendees.isEmpty()){
       return true;
     }
     return false;
   }
+
+  /***
+    *function used to filter out all unavailable and overlapping times 
+    @param events the collection of all today's events
+    @param request the new meeting request
+    @return ArrayList of TimeRanges that are available to book a meeting
+  ***/
  
-  public ArrayList<TimeRange> findUnavailableSlots(Collection<Event> events, Set<String> requiredAttendees, ArrayList<TimeRange> unavailableTimes, MeetingRequest request){
-    
-    Set<String> optionalAttendees = new HashSet<>(request.getOptionalAttendees());
-    if (!optionalAttendees.isEmpty() && requiredAttendees.isEmpty()){
-      requiredAttendees = optionalAttendees;
-    }
+  public ArrayList<TimeRange> filterUnavailableSlots(Collection<Event> events, MeetingRequest request){
+
+    ArrayList<TimeRange> unavailableTimes = new ArrayList<>();
+    ArrayList<TimeRange> optionalUnavailableTimes = new ArrayList<>();
 
     for (Event event: events){
-      if(personBusy(event, requiredAttendees)){
-        unavailableTimes.add(event.getWhen());
-      } 
+      Set<String> eventAttendees = event.getAttendees();
+      Set<String> optionalAttendees = new HashSet<>(request.getOptionalAttendees());
+      Set<String> requiredAttendees = new HashSet<>(request.getAttendees());
+      Set<String> justRequiredAttendees = new HashSet<>(eventAttendees);
+      justRequiredAttendees.retainAll(requiredAttendees);
+      Set<String> justOptionalAttendees = new HashSet<> (eventAttendees);
+      justOptionalAttendees.retainAll(optionalAttendees);
+
+      if (!justRequiredAttendees.isEmpty() && isPersonBusy(event, justRequiredAttendees)){
+          unavailableTimes.add(event.getWhen());
+      }
+
+      if (!justOptionalAttendees.isEmpty() && isPersonBusy(event, justOptionalAttendees)) {
+        optionalUnavailableTimes.add(event.getWhen());
+      }
     }
-    Collections.sort(unavailableTimes, TimeRange.ORDER_BY_START);
+
+    if (unavailableTimes.isEmpty() && !optionalUnavailableTimes.isEmpty()){
+      return findAvailableSlots(findOverlaps(optionalUnavailableTimes),request);
+    }
+    else if(!unavailableTimes.isEmpty() && optionalUnavailableTimes.isEmpty()){
+      return findAvailableSlots(findOverlaps(unavailableTimes),request);
+    } else {
+      ArrayList<TimeRange> allUnavailableTimes = new ArrayList<>();
+      allUnavailableTimes.addAll(unavailableTimes);
+      allUnavailableTimes.addAll(optionalUnavailableTimes);
+      ArrayList<TimeRange> allAvailableTimes = findAvailableSlots(findOverlaps(allUnavailableTimes),request);
+      if (allAvailableTimes.isEmpty()){
+        return findAvailableSlots(unavailableTimes,request);
+      }
+      return allAvailableTimes;
+    }
+  }
+
+  /***
+    *function used to get organize unavailable overlapping events
+    @param overlappingUnavailableTimes ArrayList of TimeRanges that are unavailable including 
+    overlaps
+    @return organized ArrayList of TimeRanges that are unavailable
+  ***/
+  
+  public ArrayList<TimeRange> findOverlaps(ArrayList<TimeRange> overlappingUnavailableTimes){
+
+    Collections.sort(overlappingUnavailableTimes, TimeRange.ORDER_BY_START);
     ArrayList<TimeRange> notOverlappingTimes = new ArrayList<>();
  
-    for (int i=0; i<unavailableTimes.size(); i++){  
-      if (notOverlappingTimes.isEmpty() || !unavailableTimes.get(i).overlaps(notOverlappingTimes.get(notOverlappingTimes.size()-1))){
-        notOverlappingTimes.add(unavailableTimes.get(i));
+    for (int i=0; i<overlappingUnavailableTimes.size(); i++){  
+      if (notOverlappingTimes.isEmpty() || 
+          !overlappingUnavailableTimes.get(i).overlaps(notOverlappingTimes.get(notOverlappingTimes.size()-1)))
+      {
+        notOverlappingTimes.add(overlappingUnavailableTimes.get(i));
       } else {
         TimeRange lastNonOverlapping = notOverlappingTimes.get(notOverlappingTimes.size()-1);
-        int start = Math.min(lastNonOverlapping.start(), unavailableTimes.get(i).start());
-        int end = Math.max(lastNonOverlapping.end(), unavailableTimes.get(i).end());
+        int start = Math.min(lastNonOverlapping.start(), overlappingUnavailableTimes.get(i).start());
+        int end = Math.max(lastNonOverlapping.end(), overlappingUnavailableTimes.get(i).end());
  
         TimeRange allUnavailable = TimeRange.fromStartEnd(start, end, false);
         notOverlappingTimes.remove(lastNonOverlapping);
@@ -68,9 +119,16 @@ public final class FindMeetingQuery {
     }
     return notOverlappingTimes;
   }
- 
-  public ArrayList<TimeRange> findAvailableSlots(ArrayList<TimeRange> unavailableTimes, long duration){
 
+  /***
+    *function used to find available time slots
+    @param unavailableTimes organized ArrayList of TimeRanges that are unavailable 
+    @return organized ArrayList of TimeRanges that are available
+  ***/
+ 
+  public ArrayList<TimeRange> findAvailableSlots(ArrayList<TimeRange> unavailableTimes, MeetingRequest request){
+
+    long duration = request.getDuration();
     int earliestStart = TimeRange.START_OF_DAY;
     int latestEnd = TimeRange.END_OF_DAY;
     ArrayList<TimeRange> availableTimes = new ArrayList<>();
